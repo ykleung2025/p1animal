@@ -54,14 +54,14 @@
             display: flex;
             flex-direction: column;
             position: relative;
-            min-height: 750px;
+            min-height: 780px;
             width: 100%;
             max-width: 1200px;
             margin: 0 auto;
             box-shadow: 0 0 20px rgba(0,0,0,0.2);
         }
 
-        /* 1. 天空區 (藍天雲朵) */
+        /* 1. 天空區 */
         .zone-sky {
             flex: 1;
             background: linear-gradient(rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.1)), 
@@ -69,28 +69,28 @@
             position: relative;
             overflow: hidden;
             border-bottom: 3px dashed #ffffff;
-            min-height: 220px;
+            min-height: 230px;
         }
 
-        /* 2. 陸地區 (香港山野環境) */
+        /* 2. 陸地區 (採用香港山野圖 mountain.jpg) */
         .zone-land {
-            flex: 1.3;
+            flex: 1.4;
             background: linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.15)), 
-                        url('https://images.unsplash.com/photo-1544644181-1484b3fdfc62?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
+                        url('mountain.jpg') center/cover no-repeat;
             position: relative;
             overflow: hidden;
             border-bottom: 4px solid #2e7d32;
-            min-height: 280px;
+            min-height: 300px;
         }
 
-        /* 3. 水池區 (郊野水池/溪流) */
+        /* 3. 水池區 (採用香港池塘圖 pond.jpg) */
         .zone-pond {
-            flex: 1;
-            background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), 
-                        url('https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
+            flex: 1.1;
+            background: linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.2)), 
+                        url('pond.jpg') center/cover no-repeat;
             position: relative;
             overflow: hidden;
-            min-height: 220px;
+            min-height: 250px;
         }
 
         /* 生態區標籤 */
@@ -196,40 +196,40 @@
             100% { transform: scaleX(-1); }
         }
 
-        /* ----- 各動物移動與轉向時間設定 ----- */
+        /* ----- 各動物移動與位置調整 ----- */
 
         /* 天空：黑臉琵鷺 */
         .anim-spoonbill {
-            top: 10%;
+            top: 8%;
             animation: pathLeftToRight 18s infinite linear;
         }
         .anim-spoonbill .icon-box { animation: flipFacingL2R 18s infinite linear; }
 
-        /* 天空：麻雀 */
-        .anim-sparrow {
-            top: 55%;
-            animation: pathRightToLeft 11s infinite linear;
-        }
-        .anim-sparrow .icon-box { animation: flipFacingR2L 11s infinite linear; }
-
         /* 天空：白鴿 */
         .anim-pigeon {
-            top: 30%;
+            top: 25%;
             animation: pathLeftToRight 15s infinite linear;
             animation-delay: -4s;
         }
         .anim-pigeon .icon-box { animation: flipFacingL2R 15s infinite linear; animation-delay: -4s; }
 
-        /* 陸地（香港山野）：野豬 */
+        /* 天空：麻雀 (★已向上調高，避免檔字) */
+        .anim-sparrow {
+            top: 42%;
+            animation: pathRightToLeft 11s infinite linear;
+        }
+        .anim-sparrow .icon-box { animation: flipFacingR2L 11s infinite linear; }
+
+        /* 陸地：野豬 */
         .anim-boar {
-            bottom: 8%;
+            bottom: 6%;
             animation: pathRightToLeft 18s infinite linear;
         }
         .anim-boar .icon-box { animation: flipFacingR2L 18s infinite linear; }
 
         /* 陸地：小狗 */
         .anim-dog {
-            bottom: 28%;
+            bottom: 26%;
             animation: pathLeftToRight 14s infinite linear;
             animation-delay: -3s;
         }
@@ -237,7 +237,7 @@
 
         /* 陸地：小貓 */
         .anim-cat {
-            bottom: 48%;
+            bottom: 46%;
             animation: pathRightToLeft 16s infinite linear;
             animation-delay: -8s;
         }
@@ -245,7 +245,7 @@
 
         /* 陸地：兔子 */
         .anim-rabbit {
-            bottom: 68%;
+            bottom: 66%;
             animation: pathLeftToRight 13s infinite linear;
             animation-delay: -5s;
         }
@@ -253,7 +253,7 @@
 
         /* 陸地：赤腹松鼠 */
         .anim-squirrel {
-            bottom: 38%;
+            bottom: 36%;
             animation: pathRightToLeft 22s infinite linear;
             animation-delay: -12s;
         }
@@ -261,14 +261,14 @@
 
         /* 水池：鯉魚 */
         .anim-carp {
-            top: 20%;
+            top: 12%;
             animation: pathRightToLeft 15s infinite linear;
         }
         .anim-carp .icon-box { animation: flipFacingR2L 15s infinite linear; }
 
-        /* 水池：龜 */
+        /* 水池：龜 (★已向上調高，避免底欄遮擋) */
         .anim-turtle {
-            top: 55%;
+            top: 38%;
             animation: pathLeftToRight 22s infinite linear;
             animation-delay: -6s;
         }
@@ -323,7 +323,23 @@
                 <div class="animal-tag">黑臉琵鷺 <span class="action-badge">(飛)</span></div>
             </a>
 
-            <!-- 動物 2: 麻雀 -->
+            <!-- 動物 2: 白鴿 -->
+            <a href="https://www.youtube.com/results?search_query=香港+白鴿+飛行" 
+               target="_blank" class="animal-btn anim-pigeon" onclick="playAudio()" title="點擊觀察白鴿飛行">
+                <div class="icon-box">
+                    <svg class="animal-svg" viewBox="0 0 100 100">
+                        <path d="M25,55 Q45,35 68,45 Q80,50 65,68 Q45,75 25,55 Z" fill="#eceff1"/>
+                        <path d="M35,50 Q50,15 65,35 Z" fill="#cfd8dc"/>
+                        <polygon points="25,55 10,50 15,62" fill="#b0bec5"/>
+                        <circle cx="70" cy="42" r="10" fill="#eceff1"/>
+                        <circle cx="72" cy="40" r="2" fill="#000"/>
+                        <polygon points="78,42 86,45 78,47" fill="#ff8a80"/>
+                    </svg>
+                </div>
+                <div class="animal-tag">白鴿 <span class="action-badge">(飛)</span></div>
+            </a>
+
+            <!-- 動物 3: 麻雀 -->
             <a href="https://www.youtube.com/results?search_query=香港+麻雀+飛行" 
                target="_blank" class="animal-btn anim-sparrow" onclick="playAudio()" title="點擊觀察麻雀飛行">
                 <div class="icon-box">
@@ -338,22 +354,6 @@
                     </svg>
                 </div>
                 <div class="animal-tag">麻雀 <span class="action-badge">(飛)</span></div>
-            </a>
-
-            <!-- 動物 3: 白鴿 -->
-            <a href="https://www.youtube.com/results?search_query=香港+白鴿+飛行" 
-               target="_blank" class="animal-btn anim-pigeon" onclick="playAudio()" title="點擊觀察白鴿飛行">
-                <div class="icon-box">
-                    <svg class="animal-svg" viewBox="0 0 100 100">
-                        <path d="M25,55 Q45,35 68,45 Q80,50 65,68 Q45,75 25,55 Z" fill="#eceff1"/>
-                        <path d="M35,50 Q50,15 65,35 Z" fill="#cfd8dc"/>
-                        <polygon points="25,55 10,50 15,62" fill="#b0bec5"/>
-                        <circle cx="70" cy="42" r="10" fill="#eceff1"/>
-                        <circle cx="72" cy="40" r="2" fill="#000"/>
-                        <polygon points="78,42 86,45 78,47" fill="#ff8a80"/>
-                    </svg>
-                </div>
-                <div class="animal-tag">白鴿 <span class="action-badge">(飛)</span></div>
             </a>
         </section>
 
@@ -385,14 +385,11 @@
                target="_blank" class="animal-btn anim-dog" onclick="playAudio()" title="點擊觀察小狗走動">
                 <div class="icon-box">
                     <svg class="animal-svg" viewBox="0 0 100 100">
-                        <!-- 狗身體與尾巴 -->
                         <ellipse cx="45" cy="58" rx="22" ry="16" fill="#8d6e63"/>
                         <path d="M23,55 Q12,45 15,35" stroke="#8d6e63" stroke-width="5" fill="none" stroke-linecap="round"/>
-                        <!-- 腳 -->
                         <rect x="30" y="70" width="5" height="12" rx="2" fill="#6d4c41"/>
                         <rect x="40" y="70" width="5" height="12" rx="2" fill="#6d4c41"/>
                         <rect x="52" y="70" width="5" height="12" rx="2" fill="#6d4c41"/>
-                        <!-- 頭部、鼻子、垂耳 -->
                         <circle cx="68" cy="45" r="13" fill="#8d6e63"/>
                         <ellipse cx="75" cy="48" rx="7" ry="5" fill="#d7ccc8"/>
                         <circle cx="78" cy="46" r="2.5" fill="#000"/>
@@ -408,16 +405,13 @@
                target="_blank" class="animal-btn anim-cat" onclick="playAudio()" title="點擊觀察小貓走動">
                 <div class="icon-box">
                     <svg class="animal-svg" viewBox="0 0 100 100">
-                        <!-- 貓身體與尾巴 -->
                         <ellipse cx="45" cy="60" rx="20" ry="16" fill="#ff9800"/>
                         <path d="M25,60 Q10,50 15,35" stroke="#ff9800" stroke-width="5" fill="none" stroke-linecap="round"/>
-                        <!-- 貓頭與尖耳 -->
                         <circle cx="65" cy="45" r="14" fill="#ff9800"/>
                         <polygon points="58,35 62,20 68,34" fill="#ff9800"/>
                         <polygon points="68,34 74,20 78,35" fill="#ff9800"/>
                         <polygon points="60,33 63,23 66,33" fill="#ffe0b2"/>
                         <polygon points="70,33 73,23 76,33" fill="#ffe0b2"/>
-                        <!-- 五官與鬍鬚 -->
                         <circle cx="62" cy="43" r="2" fill="#000"/>
                         <circle cx="70" cy="43" r="2" fill="#000"/>
                         <polygon points="65,47 67,47 66,49" fill="#ff4081"/>
@@ -432,16 +426,13 @@
                target="_blank" class="animal-btn anim-rabbit" onclick="playAudio()" title="點擊觀察兔子跳走">
                 <div class="icon-box">
                     <svg class="animal-svg" viewBox="0 0 100 100">
-                        <!-- 兔子身體與球尾 -->
                         <ellipse cx="40" cy="60" rx="18" ry="15" fill="#ffffff" stroke="#e0e0e0" stroke-width="1.5"/>
                         <circle cx="20" cy="62" r="5" fill="#ffffff"/>
-                        <!-- 頭與長耳朵 -->
                         <circle cx="60" cy="50" r="12" fill="#ffffff" stroke="#e0e0e0" stroke-width="1.5"/>
                         <ellipse cx="55" cy="28" rx="4" ry="14" fill="#ffffff" stroke="#e0e0e0" stroke-width="1.5"/>
                         <ellipse cx="55" cy="28" rx="2" ry="10" fill="#ff80ab"/>
                         <ellipse cx="63" cy="28" rx="4" ry="14" fill="#ffffff" stroke="#e0e0e0" stroke-width="1.5"/>
                         <ellipse cx="63" cy="28" rx="2" ry="10" fill="#ff80ab"/>
-                        <!-- 眼鼻 -->
                         <circle cx="64" cy="48" r="2" fill="#000"/>
                         <circle cx="67" cy="52" r="1.5" fill="#ff80ab"/>
                     </svg>
@@ -466,9 +457,9 @@
             </a>
         </section>
 
-        <!-- ================= 3. 水池區域 (郊野水池/溪流 - 游動) ================= -->
+        <!-- ================= 3. 池塘區域 (香港園林池塘 - 游動) ================= -->
         <section class="zone-pond">
-            <div class="zone-label">郊野水池與溪流 💦 (游動)</div>
+            <div class="zone-label">池塘 🐟 (游動)</div>
 
             <!-- 動物 9: 鯉魚 -->
             <a href="https://www.youtube.com/results?search_query=鯉魚+游水" 
@@ -522,8 +513,8 @@
                 const gain = audioCtx.createGain();
                 
                 osc.type = 'sine';
-                osc.frequency.setValueAtTime(587.33, audioCtx.currentTime); // D5
-                osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.15); // A5
+                osc.frequency.setValueAtTime(587.33, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.15);
 
                 gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
                 gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
