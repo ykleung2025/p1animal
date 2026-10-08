@@ -627,49 +627,73 @@ const SPECIES = [
   { id: "spoonbill", name: "黑臉琵鷺", cat: "fly", motion: "glide", k: 1.15,
     how: "我拍動又大又闊的翅膀飛行，有時張開翅膀在天空滑翔。",
     fact: "我的嘴巴長長的，像一隻湯匙。每年冬天，我會飛到香港米埔的濕地過冬。",
-    hint: "黑臉琵鷺有一對大翅膀。", video: "黑臉琵鷺 雀鳥 飛行 Black-faced spoonbill bird" },
+    hint: "黑臉琵鷺有一對大翅膀。" },
   { id: "pigeon", name: "白鴿", cat: "fly", motion: "flap", k: .95,
     how: "我快快地拍動翅膀，在天空飛來飛去。",
     fact: "我也會用兩隻腳在地上走路，常常在公園找食物。",
-    hint: "白鴿有一對翅膀。", also: { walk: "白鴿也會用兩隻腳走路，不過牠最厲害的是會飛！" }, video: "白鴿 鴿子 飛行 pigeon flying slow motion" },
+    hint: "白鴿有一對翅膀。", also: { walk: "白鴿也會用兩隻腳走路，不過牠最厲害的是會飛！" } },
   { id: "sparrow", name: "麻雀", cat: "fly", motion: "bound", k: .8,
     how: "我拍幾下翅膀，又收起翅膀，一高一低地飛。",
     fact: "我的臉頰上有一點黑色，喜歡在樹上吱吱喳喳地叫。",
-    hint: "麻雀有一對小翅膀。", also: { walk: "麻雀也會在地上一跳一跳，不過牠最常用翅膀飛！" }, video: "樹麻雀 雀鳥 Eurasian tree sparrow bird" },
+    hint: "麻雀有一對小翅膀。", also: { walk: "麻雀也會在地上一跳一跳，不過牠最常用翅膀飛！" } },
   { id: "butterfly", name: "蝴蝶", cat: "fly", motion: "flutter", k: .72,
     how: "我輕輕地拍動四片翅膀，在花叢中飛舞。",
     fact: "我是昆蟲，有六隻腳。不只雀鳥會飛，很多昆蟲也會飛啊！",
-    hint: "蝴蝶有四片漂亮的翅膀。", video: "蝴蝶 昆蟲 butterfly" },
+    hint: "蝴蝶有四片漂亮的翅膀。" },
   { id: "boar", name: "野豬", cat: "walk", motion: "trot", k: 1.15, ground: true,
     how: "我用四隻腳在山上走動，走得又快又穩。",
     fact: "我用長鼻子在泥土裏找食物。在郊野見到我，要保持距離，也不要餵我啊！",
-    hint: "野豬沒有翅膀，牠有四隻腳。", video: "野豬 動物介紹 兒童 wild boar for kids" },
+    hint: "野豬沒有翅膀，牠有四隻腳。" },
   { id: "dog", name: "小狗", cat: "walk", motion: "dog", k: 1, ground: true, wag: true,
     how: "我用四隻腳走路，也會跑得很快。",
     fact: "我開心的時候，會搖搖尾巴。",
-    hint: "小狗沒有翅膀，牠有四隻腳。", also: { swim: "對！小狗也會游泳，不過牠平時用四隻腳走路和跑步。" }, video: "小狗 走路 puppy walking" },
+    hint: "小狗沒有翅膀，牠有四隻腳。", also: { swim: "對！小狗也會游泳，不過牠平時用四隻腳走路和跑步。" } },
   { id: "cat", name: "小貓", cat: "walk", motion: "cat", k: .95, ground: true,
     how: "我用四隻腳走路，腳步輕輕的，沒有聲音。",
     fact: "我的腳底有軟軟的肉墊，還會用長尾巴保持平衡。",
-    hint: "小貓沒有翅膀，牠有四隻腳。", video: "小貓 走路 kitten walking" },
+    hint: "小貓沒有翅膀，牠有四隻腳。" },
   { id: "rabbit", name: "兔子", cat: "walk", motion: "hop", k: .9, ground: true, word: "跳",
     how: "我用有力的後腿，一跳一跳地前進。",
     fact: "我的耳朵長長的，可以聽到很遠的聲音。",
-    hint: "兔子沒有翅膀，牠有強壯的後腿。", video: "兔子 動物介紹 兒童" },
+    hint: "兔子沒有翅膀，牠有強壯的後腿。" },
   { id: "squirrel", name: "赤腹松鼠", cat: "walk", motion: "scamper", k: .85, ground: true, word: "跳",
     how: "我用四隻腳跑跑跳跳，還會爬到樹上。",
     fact: "我的肚子是紅色的，所以叫「赤腹」松鼠。我的大尾巴毛茸茸的。",
-    hint: "松鼠沒有翅膀，牠有四隻腳。", video: "赤腹松鼠 香港 動物 Pallas squirrel" },
+    hint: "松鼠沒有翅膀，牠有四隻腳。" },
   { id: "koi", name: "鯉魚", cat: "swim", motion: "fish", k: 1,
     how: "我左右擺動身體和尾巴，在水中游來游去。",
     fact: "我用魚鰭控制方向，用鰓在水中呼吸。",
-    hint: "鯉魚沒有腳，也沒有翅膀，牠有魚鰭和尾巴。", video: "錦鯉 游泳 koi fish" },
+    hint: "鯉魚沒有腳，也沒有翅膀，牠有魚鰭和尾巴。" },
   { id: "turtle", name: "烏龜", cat: "swim", motion: "paddle", k: 1.05,
     how: "我用四隻腳划水，慢慢地游。",
     fact: "我也會爬上石頭曬太陽。我有硬硬的殼保護身體。",
-    hint: "烏龜沒有翅膀。", also: { walk: "對！烏龜在陸地上會慢慢地爬，在水中就用四隻腳划水游泳。" }, video: "烏龜 游泳 動物 小朋友 turtle kids" },
+    hint: "烏龜沒有翅膀。", also: { walk: "對！烏龜在陸地上會慢慢地爬，在水中就用四隻腳划水游泳。" } },
 ];
 const byId = Object.fromEntries(SPECIES.map(s => [s.id, s]));
+
+/* ================= 「看短片」影片 =================
+   每隻動物連結一條已挑選的 YouTube 影片。
+   想換片：在 YouTube 打開新影片，複製網址中「v=」後面的 11 個字元（影片編號），
+   貼在對應動物的 id 引號內。如 id 留空 ""，就會改為用 search 的字詞搜尋。 */
+const VIDEOS = {
+  spoonbill: { id: "BV3MLCLggW4", search: "黑臉琵鷺 雀鳥 飛行 Black-faced spoonbill bird" },  // 黑臉琵鷺
+  pigeon:    { id: "uw13Xkj0ZfI", search: "白鴿 鴿子 飛行 pigeon flying slow motion" },  // 白鴿
+  sparrow:   { id: "Q9LB2W8xsRw", search: "樹麻雀 雀鳥 Eurasian tree sparrow bird" },  // 麻雀
+  butterfly: { id: "keP4zHb1C5M", search: "蝴蝶 昆蟲 butterfly" },  // 蝴蝶
+  boar:      { id: "jKWCmrEt_Gs", search: "野豬 動物介紹 兒童 wild boar for kids" },  // 野豬
+  dog:       { id: "CoL8Gtvxfl0", search: "小狗 走路 puppy walking" },  // 小狗
+  cat:       { id: "pDpKEKNwz2Y", search: "小貓 走路 kitten walking" },  // 小貓
+  rabbit:    { id: "wXXlIuD8Fo8", search: "兔子 動物介紹 兒童" },  // 兔子
+  squirrel:  { id: "9M8moIJTPNM", search: "赤腹松鼠 香港 動物 Pallas squirrel" },  // 赤腹松鼠
+  koi:       { id: "5XJteeTP5SA", search: "錦鯉 游泳 koi fish" },  // 鯉魚
+  turtle:    { id: "C5vL9uEj9bY", search: "烏龜 游泳 動物 小朋友 turtle kids" },  // 烏龜
+};
+const videoUrl = sp => {
+  const v = VIDEOS[sp.id];
+  return v.id
+    ? "https://www.youtube.com/watch?v=" + v.id
+    : "https://www.youtube.com/results?search_query=" + encodeURIComponent(v.search) + "&sp=EgIQAQ%253D%253D";
+};
 
 /* 場景中的動物（鯉魚有兩條，顏色不同） */
 const ACTORS = [
@@ -1166,7 +1190,7 @@ function openCard(sp) {
   $("#card-chip").innerHTML = `牠住在${cat.zoneName}，會<span class="mv mv-${sp.cat}">${cat.name}</span>${kind === "hop" ? "（一跳一跳）" : ""}`;
   $("#card-how").textContent = sp.how;
   $("#card-fact").textContent = sp.fact;
-  $("#card-video").href = "https://www.youtube.com/results?search_query=" + encodeURIComponent(sp.video) + "&sp=EgIQAQ%253D%253D";
+  $("#card-video").href = videoUrl(sp);
   $("#card-speak").hidden = !canSpeak;
   openDialog(card);
 }
