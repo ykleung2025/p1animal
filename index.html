@@ -334,6 +334,21 @@ dialog::backdrop { background: rgba(30, 20, 10, .55); }
 .card-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 16px; }
 .btn-video { background: #ef5350; color: #fff; }
 .note { margin-top: 8px; font-size: 1rem; color: #6d4c41; }
+.card.playing { grid-template-columns: 1fr; }
+.card.playing > .card-stage, .card.playing > .card-body { display: none; }
+.card-player h2 { font-size: clamp(1.6rem, 3.5vw, 2.4rem); font-weight: 900; padding-right: 64px; margin-bottom: 10px; }
+.player-frame {
+  width: min(100%, calc((88dvh - 190px) * 16 / 9));
+  margin: 0 auto;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  border: 3px solid var(--ink);
+  border-radius: 16px;
+  overflow: hidden;
+}
+.player-frame iframe { width: 100%; height: 100%; border: 0; display: block; }
+.card-player .card-actions { justify-content: center; }
+.btn-yt { background: #fff; font-size: 1.05rem; }
 
 .quiz { grid-template-columns: 1fr; text-align: center; justify-items: center; }
 .quiz-progress { font-size: clamp(1.1rem, 2vw, 1.35rem); font-weight: 800; padding-right: 60px; }
@@ -421,7 +436,16 @@ dialog::backdrop { background: rgba(30, 20, 10, .55); }
         <button class="btn" type="button" id="card-speak">🔊 讀出來</button>
         <a class="btn btn-video" id="card-video" target="_blank" rel="noopener">▶ 看短片</a>
       </div>
-      <p class="note">短片會在 YouTube 打開，請和老師或家長一起看。</p>
+      <p class="note" id="card-note"></p>
+    </div>
+    <div class="card-player" id="card-player" hidden>
+      <h2 id="player-name"></h2>
+      <div class="player-frame" id="player-frame"></div>
+      <div class="card-actions">
+        <button class="btn" type="button" id="player-back">◀ 返回介紹</button>
+        <a class="btn btn-yt" id="player-yt" target="_blank" rel="noopener">在 YouTube 打開</a>
+      </div>
+      <p class="note">如果短片播放不到，或要求登入：請不要自己登入，找老師幫忙。</p>
     </div>
   </div>
 </dialog>
@@ -672,14 +696,16 @@ const SPECIES = [
 const byId = Object.fromEntries(SPECIES.map(s => [s.id, s]));
 
 /* ================= 「看短片」影片 =================
-   有 id 的動物連結一條已挑選的 YouTube 影片；id 留空 "" 的動物（現時是麻雀）
-   會改為用 search 的字詞在 YouTube 搜尋（只顯示影片）。
+   有 id 的動物：短片會在介紹卡內播放（youtube-nocookie.com，不用離開網頁）。
+   id 留空 "" 的動物：會在新分頁用 search 的字詞搜尋 YouTube（只顯示影片）。
    想換片：在 YouTube 打開新影片，複製網址中「v=」後面的 11 個字元（影片編號），
-   貼在對應動物的 id 引號內。想改用搜尋：把 id 留空，再修改 search 的字詞。 */
+   貼在對應動物的 id 引號內。想改用搜尋：把 id 留空，再修改 search 的字詞。
+   如某條影片的擁有者不准嵌入（介紹卡內顯示「影片無法播放」），加上 embed: false，
+   例如 { id: "xxxxxxxxxxx", embed: false, search: "…" }，就會改為在新分頁打開 YouTube。 */
 const VIDEOS = {
   spoonbill: { id: "BV3MLCLggW4", search: "黑臉琵鷺 雀鳥 飛行 Black-faced spoonbill bird" },  // 黑臉琵鷺
   pigeon:    { id: "uw13Xkj0ZfI", search: "白鴿 鴿子 飛行 pigeon flying slow motion" },  // 白鴿
-  sparrow:   { id: "", search: "香港 動物 公園 麻雀" },  // 麻雀（老師指定用搜尋）
+  sparrow:   { id: "Q9LB2W8xsRw", search: "香港 動物 公園 麻雀" },  // 麻雀
   butterfly: { id: "keP4zHb1C5M", search: "蝴蝶 昆蟲 butterfly" },  // 蝴蝶
   boar:      { id: "jKWCmrEt_Gs", search: "野豬 動物介紹 兒童 wild boar for kids" },  // 野豬
   dog:       { id: "CoL8Gtvxfl0", search: "小狗 走路 puppy walking" },  // 小狗
@@ -695,6 +721,10 @@ const videoUrl = sp => {
     ? "https://www.youtube.com/watch?v=" + v.id
     : "https://www.youtube.com/results?search_query=" + encodeURIComponent(v.search) + "&sp=EgIQAQ%253D%253D";
 };
+const canEmbed = sp => Boolean(VIDEOS[sp.id].id) && VIDEOS[sp.id].embed !== false;
+const embedUrl = sp =>
+  "https://www.youtube-nocookie.com/embed/" + VIDEOS[sp.id].id +
+  "?autoplay=1&playsinline=1&rel=0&iv_load_policy=3&hl=zh-HK&cc_lang_pref=zh-HK";
 
 /* 場景中的動物（鯉魚有兩條，顏色不同） */
 const ACTORS = [
@@ -1192,9 +1222,44 @@ function openCard(sp) {
   $("#card-how").textContent = sp.how;
   $("#card-fact").textContent = sp.fact;
   $("#card-video").href = videoUrl(sp);
+  $("#card-note").textContent = canEmbed(sp)
+    ? "短片會在這裏播放，請和老師或家長一起看。"
+    : VIDEOS[sp.id].id
+      ? "短片會在 YouTube 打開，請和老師或家長一起看。如要求登入，請不要自己登入，找老師幫忙。"
+      : "會在 YouTube 搜尋" + sp.name + "的短片，請和老師或家長一起選片。如要求登入，請不要自己登入，找老師幫忙。";
   $("#card-speak").hidden = !canSpeak;
+  stopPlayer();
   openDialog(card);
 }
+
+const cardBox = card.querySelector(".card");
+function playVideo(sp) {
+  if (canSpeak) speechSynthesis.cancel();
+  $("#player-name").textContent = "▶ " + sp.name;
+  $("#player-yt").href = videoUrl(sp);
+  const f = document.createElement("iframe");
+  f.src = embedUrl(sp);
+  f.title = sp.name + " 短片";
+  f.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
+  f.allowFullscreen = true;
+  f.referrerPolicy = "strict-origin-when-cross-origin";
+  $("#player-frame").replaceChildren(f);
+  cardBox.classList.add("playing");
+  $("#card-player").hidden = false;
+  $("#player-back").focus();
+}
+function stopPlayer() {
+  $("#player-frame").replaceChildren();
+  $("#card-player").hidden = true;
+  cardBox.classList.remove("playing");
+}
+$("#card-video").addEventListener("click", e => {
+  if (!cardSp || !canEmbed(cardSp)) return;
+  e.preventDefault();
+  playVideo(cardSp);
+});
+$("#player-back").addEventListener("click", () => { stopPlayer(); $("#card-video").focus(); });
+card.addEventListener("close", stopPlayer);
 $("#card-speak").addEventListener("click", () => {
   if (cardSp) speak(`${cardSp.name}。${cardSp.how}${cardSp.fact}`);
 });
