@@ -672,13 +672,14 @@ const SPECIES = [
 const byId = Object.fromEntries(SPECIES.map(s => [s.id, s]));
 
 /* ================= 「看短片」影片 =================
-   每隻動物連結一條已挑選的 YouTube 影片。
+   有 id 的動物連結一條已挑選的 YouTube 影片；id 留空 "" 的動物（現時是麻雀）
+   會改為用 search 的字詞在 YouTube 搜尋（只顯示影片）。
    想換片：在 YouTube 打開新影片，複製網址中「v=」後面的 11 個字元（影片編號），
-   貼在對應動物的 id 引號內。如 id 留空 ""，就會改為用 search 的字詞搜尋。 */
+   貼在對應動物的 id 引號內。想改用搜尋：把 id 留空，再修改 search 的字詞。 */
 const VIDEOS = {
   spoonbill: { id: "BV3MLCLggW4", search: "黑臉琵鷺 雀鳥 飛行 Black-faced spoonbill bird" },  // 黑臉琵鷺
   pigeon:    { id: "uw13Xkj0ZfI", search: "白鴿 鴿子 飛行 pigeon flying slow motion" },  // 白鴿
-  sparrow:   { id: "Q9LB2W8xsRw", search: "樹麻雀 雀鳥 Eurasian tree sparrow bird" },  // 麻雀
+  sparrow:   { id: "", search: "香港 動物 公園 麻雀" },  // 麻雀（老師指定用搜尋）
   butterfly: { id: "keP4zHb1C5M", search: "蝴蝶 昆蟲 butterfly" },  // 蝴蝶
   boar:      { id: "jKWCmrEt_Gs", search: "野豬 動物介紹 兒童 wild boar for kids" },  // 野豬
   dog:       { id: "CoL8Gtvxfl0", search: "小狗 走路 puppy walking" },  // 小狗
