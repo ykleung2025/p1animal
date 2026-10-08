@@ -15,7 +15,7 @@
   --walk: #c4620f;
   --swim: #0b7fc4;
   --accent: #ff9f1c;
-  --size: clamp(64px, min(8.6vw, 12.5vh), 128px);
+  --size: clamp(64px, min(8.6vw, 12.5vh), 150px);
   --tag: clamp(15px, min(1.55vw, 2.3vh), 22px);
   --font: "PingFang HK", "PingFang TC", "Noto Sans TC", "Noto Sans HK", "Microsoft JhengHei", "微軟正黑體", "Heiti TC", sans-serif;
 }
@@ -105,15 +105,13 @@ button, a { font: inherit; color: inherit; -webkit-tap-highlight-color: transpar
   flex-direction: column;
   min-height: 540px;
   width: 100%;
-  max-width: 1680px;
-  margin: 0 auto;
   user-select: none;
   -webkit-user-select: none;
   -webkit-touch-callout: none;
 }
 .zone { position: relative; overflow: hidden; }
 .zone-sky {
-  flex: 1;
+  flex: 1.15;
   background:
     radial-gradient(circle at 90% 22%, #fff7b0 0 34px, rgba(255, 236, 120, .55) 35px 52px, transparent 53px),
     linear-gradient(#7cc8f7, #c9ecff 85%, #e6f7ff);
@@ -123,7 +121,7 @@ button, a { font: inherit; color: inherit; -webkit-tap-highlight-color: transpar
   background: linear-gradient(rgba(255, 255, 255, .12), rgba(60, 40, 10, .18)), url("mountain.jpg") center 60% / cover no-repeat;
 }
 .zone-pond {
-  flex: 1;
+  flex: .95;
   background: linear-gradient(rgba(20, 80, 120, .12), rgba(5, 40, 70, .3)), url("pond.jpg") center 75% / cover no-repeat;
 }
 .zone-land::before, .zone-pond::before {
@@ -807,9 +805,9 @@ function bounds(a) {
   const { w, h } = a.zone;
   const maxX = Math.max(0, w - a.bw);
   const maxY = Math.max(0, h - a.bh - 4);
-  if (a.m.kind === "walk" || a.m.kind === "hop") return { minX: 0, maxX, minY: Math.min(maxY, h * .3), maxY };
+  if (a.m.kind === "walk" || a.m.kind === "hop") return { minX: 0, maxX, minY: Math.min(maxY, h * .2), maxY };
   if (a.m.kind === "swim") return { minX: 0, maxX, minY: Math.min(maxY, h * .16), maxY };
-  return { minX: 0, maxX, minY: Math.min(maxY, 8), maxY };
+  return { minX: 0, maxX, minY: Math.min(maxY, h * .07), maxY };
 }
 
 function measure() {
@@ -853,10 +851,16 @@ function newTarget(a) {
     const running = a.m.run && Math.random() < a.m.runChance;
     a.speed = rand(...(running ? a.m.run : a.m.speed));
   } else if (a.m.kind === "fly" || a.m.kind === "swim") {
-    const far = Math.random() < .7;
-    a.tx = far ? (a.x < (b.minX + b.maxX) / 2 ? rand(.6, 1) : rand(0, .4)) * (b.maxX - b.minX) + b.minX : rand(b.minX, b.maxX);
-    a.ty = rand(b.minY, b.maxY);
-    if (a.sp.id === "turtle" && Math.random() < .35) a.ty = b.minY + rand(0, .2) * (b.maxY - b.minY);
+    const others = actors.filter(o => o !== a && o.zone === a.zone);
+    let best = -1;
+    for (let i = 0; i < 6; i++) {
+      const far = Math.random() < .7;
+      const tx = far ? (a.x < (b.minX + b.maxX) / 2 ? rand(.6, 1) : rand(0, .4)) * (b.maxX - b.minX) + b.minX : rand(b.minX, b.maxX);
+      let ty = rand(b.minY, b.maxY);
+      if (a.sp.id === "turtle" && Math.random() < .35) ty = b.minY + rand(0, .2) * (b.maxY - b.minY);
+      const room = Math.min(Infinity, ...others.map(o => Math.hypot((o.tx ?? o.x) - tx, (o.ty ?? o.y) - ty)));
+      if (room > best) { best = room; a.tx = tx; a.ty = ty; }
+    }
     a.speed = rand(...a.m.speed);
   }
 }
@@ -898,7 +902,7 @@ function updateFly(a, dt, b) {
     if (a.state === "glide") cls = "is-gliding";
   } else if (a.sp.motion === "bound") {
     const p = (a.t / .8) % 1;
-    bob = -Math.sin(p * Math.PI * 2) * a.bh * .09;
+    bob = -Math.sin(p * Math.PI * 2) * a.bh * .07;
     if (p > .5 && p < .85) cls = "is-folded";
   } else if (a.sp.motion === "flutter") {
     bob = Math.sin(a.t * 5 + a.phase) * a.bh * .08;
@@ -1012,7 +1016,7 @@ let paused = false, last = 0, rafId = 0;
 const still = () => paused || document.hidden;
 
 /* 同一區的動物太接近時，輕輕推開，避免名字疊在一起 */
-function separate(dt) {
+function separate(dt, now) {
   for (let i = 0; i < actors.length; i++) {
     for (let j = i + 1; j < actors.length; j++) {
       const a = actors[i], c = actors[j];
@@ -1022,22 +1026,44 @@ function separate(dt) {
       const ox = (a.bw + c.bw) / 2 - Math.abs(dx);
       const oy = (a.bh + c.bh) / 2 - Math.abs(dy);
       if (ox <= 0 || oy <= 0) continue;
-      const push = Math.min(oy, 60 * dt);
-      const s = dy >= 0 ? 1 : -1;
-      for (const [m, dir] of [[a, -s], [c, s]]) {
-        if (m.held || m.state === "hop") continue;
+      const push = Math.min(oy, 90 * dt) / 2;
+      for (const [m, awx, awy] of [[a, -dx, -dy], [c, dx, dy]]) {
+        if (m.held) continue;
+        if (now - (m.avoidAt || 0) > 1200) turnAway(m, awx, awy, now);
+        if (m.state === "hop") continue;
         const b = bounds(m);
-        m.y = clamp(m.y + dir * push / 2, b.minY, b.maxY);
-        if (m.ty !== undefined) m.ty = clamp(m.ty + dir * push / 2, b.minY, b.maxY);
+        m.y = clamp(m.y + Math.sign(awy || 1) * push, b.minY, b.maxY);
+        m.ty = clamp(m.ty + Math.sign(awy || 1) * push, b.minY, b.maxY);
       }
     }
   }
 }
 
+/* 迎面碰上其他動物時，掉頭走開 */
+function turnAway(m, awx, awy, now) {
+  const b = bounds(m);
+  const away = Math.sign(awx || 1);
+  const kind = m.m.kind;
+  if (kind === "walk") {
+    if (m.state !== "move" || Math.sign(m.tx - m.x) === away) return;
+    m.tx = clamp(m.x + away * rand(.15, .4) * m.zone.w, b.minX, b.maxX);
+  } else if (kind === "hop") {
+    if (m.face === away) return;
+    m.face = away;
+    if (m.state === "hop") m.x0 = m.x1 = m.x;
+  } else {
+    if (Math.cos(m.heading) * awx + Math.sin(m.heading) * awy >= 0) return;
+    const len = Math.hypot(awx, awy) || 1;
+    m.tx = clamp(m.x + awx / len * m.zone.w * .35, b.minX, b.maxX);
+    m.ty = clamp(m.y + awy / len * m.zone.h * .5, b.minY, b.maxY);
+  }
+  m.avoidAt = now;
+}
+
 function frame(now) {
   const dt = Math.min(.05, (now - last) / 1000 || 0);
   last = now;
-  separate(dt);
+  separate(dt, now);
   for (const a of actors) {
     if (a.held) continue;
     a.t += dt;
@@ -1137,7 +1163,7 @@ function openCard(sp) {
   art.style.setProperty("--wag", (MOTION[sp.motion].wag || .7) + "s");
   art.style.setProperty("--gait", ".6s");
   $("#card-name").textContent = sp.name;
-  $("#card-chip").innerHTML = `牠住在${cat.zoneName}，會<span class="mv mv-${sp.cat}">${cat.name}</span>`;
+  $("#card-chip").innerHTML = `牠住在${cat.zoneName}，會<span class="mv mv-${sp.cat}">${cat.name}</span>${kind === "hop" ? "（一跳一跳）" : ""}`;
   $("#card-how").textContent = sp.how;
   $("#card-fact").textContent = sp.fact;
   $("#card-video").href = "https://www.youtube.com/results?search_query=" + encodeURIComponent(sp.video);
