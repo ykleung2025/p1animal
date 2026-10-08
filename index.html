@@ -1,531 +1,1235 @@
 <!DOCTYPE html>
 <html lang="zh-HK">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>香港動物大探究 🐾 | 小一自主學習網</title>
-    <style>
-        /* ================= 基礎與響應式樣式 ================= */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Comic Sans MS', 'Chalkboard SE', '微軟正黑體', sans-serif;
-            user-select: none;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="小一常識／科學自學活動：觀察香港常見動物怎樣飛行、走動和游動。">
+<meta name="theme-color" content="#ffb547">
+<title>香港動物大探究｜小一自主學習</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%90%BE%3C/text%3E%3C/svg%3E">
+<style>
+:root {
+  --ink: #43302b;
+  --paper: #fffdf7;
+  --fly: #6a4fd1;
+  --walk: #c4620f;
+  --swim: #0b7fc4;
+  --accent: #ff9f1c;
+  --size: clamp(64px, min(8.6vw, 12.5vh), 128px);
+  --tag: clamp(15px, min(1.55vw, 2.3vh), 22px);
+  --font: "PingFang HK", "PingFang TC", "Noto Sans TC", "Noto Sans HK", "Microsoft JhengHei", "微軟正黑體", "Heiti TC", sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  font-family: var(--font);
+  color: var(--ink);
+  background: #fff4dc;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  touch-action: manipulation;
+}
+button, a { font: inherit; color: inherit; -webkit-tap-highlight-color: transparent; }
+:focus-visible { outline: 4px solid #1565c0; outline-offset: 3px; }
 
-        body {
-            background-color: #cfd8dc;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
+/* ---------- 頁頭 ---------- */
+.top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  padding: 10px clamp(12px, 2vw, 28px);
+  background: linear-gradient(135deg, #ffd166, #ffb547);
+  border-bottom: 4px solid #e8902a;
+  position: relative;
+  z-index: 20;
+}
+.title h1 {
+  font-size: clamp(1.6rem, 3.4vw, 2.6rem);
+  font-weight: 900;
+  letter-spacing: .06em;
+  color: #8a2c0d;
+  text-shadow: 0 2px 0 #fff3d6;
+  line-height: 1.15;
+}
+.title p {
+  margin-top: 2px;
+  font-size: clamp(1rem, 1.9vw, 1.35rem);
+  font-weight: 700;
+  color: #4a2a12;
+}
+.title .mv { margin: 0 .1em; }
+.controls { display: flex; gap: 10px; flex-wrap: wrap; }
+.btn {
+  min-height: 56px;
+  min-width: 56px;
+  padding: 0 20px;
+  border: 3px solid var(--ink);
+  border-radius: 999px;
+  background: var(--paper);
+  font-size: clamp(1.05rem, 1.7vw, 1.3rem);
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 0 var(--ink);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: transform .08s, box-shadow .08s;
+}
+.btn:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--ink); }
+.btn-quiz { background: #fff176; }
+.btn[aria-pressed="true"] { background: #c8e6c9; }
 
-        header {
-            background: linear-gradient(135deg, #ff9800, #fbc02d);
-            padding: 12px;
-            text-align: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            z-index: 10;
-        }
+.mv {
+  display: inline-block;
+  padding: 0 .45em;
+  border-radius: .6em;
+  color: #fff;
+  font-weight: 800;
+  font-style: normal;
+}
+.mv-fly { background: var(--fly); }
+.mv-walk { background: var(--walk); }
+.mv-swim { background: var(--swim); }
 
-        h1 {
-            color: #d84315;
-            font-size: clamp(1.8rem, 4vw, 2.6rem);
-            text-shadow: 2px 2px 0px #fff;
-            margin-bottom: 4px;
-        }
+/* ---------- 場景 ---------- */
+.scene {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 540px;
+  width: 100%;
+  max-width: 1680px;
+  margin: 0 auto;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+.zone { position: relative; overflow: hidden; }
+.zone-sky {
+  flex: 1;
+  background:
+    radial-gradient(circle at 90% 22%, #fff7b0 0 34px, rgba(255, 236, 120, .55) 35px 52px, transparent 53px),
+    linear-gradient(#7cc8f7, #c9ecff 85%, #e6f7ff);
+}
+.zone-land {
+  flex: 1.3;
+  background: linear-gradient(rgba(255, 255, 255, .12), rgba(60, 40, 10, .18)), url("mountain.jpg") center 60% / cover no-repeat;
+}
+.zone-pond {
+  flex: 1;
+  background: linear-gradient(rgba(20, 80, 120, .12), rgba(5, 40, 70, .3)), url("pond.jpg") center 75% / cover no-repeat;
+}
+.zone-land::before, .zone-pond::before {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; top: 0;
+  height: 14px;
+  z-index: 1;
+  pointer-events: none;
+  background-repeat: repeat-x;
+  background-size: 48px 14px;
+}
+.zone-land::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 14'%3E%3Cpath d='M0 0h48v4c-4 0-5 8-8 8s-4-8-8-8-5 9-8 9-4-9-8-9-5 8-8 8-4-8-8-8z' fill='%23e6f7ff'/%3E%3C/svg%3E");
+}
+.zone-pond::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 14'%3E%3Cpath d='M0 0h48v6c-6 0-6 6-12 6s-6-6-12-6-6 6-12 6S6 6 0 6z' fill='%235b8a3c' opacity='.9'/%3E%3C/svg%3E");
+}
+.zone-label {
+  position: absolute;
+  left: 12px;
+  top: 14px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(255, 253, 247, .94);
+  border: 3px solid var(--ink);
+  font-size: clamp(1rem, 1.7vw, 1.3rem);
+  font-weight: 800;
+  pointer-events: none;
+}
+.zone-sky .zone-label { top: 10px; }
 
-        .subtitle {
-            color: #1b5e20;
-            font-size: clamp(1rem, 2.2vw, 1.3rem);
-            font-weight: bold;
-            background: rgba(255, 255, 255, 0.9);
-            display: inline-block;
-            padding: 4px 16px;
-            border-radius: 20px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
+.cloud {
+  position: absolute;
+  width: 160px;
+  height: 64px;
+  opacity: .92;
+  pointer-events: none;
+  animation: cloud-drift linear infinite;
+}
+@keyframes cloud-drift {
+  from { transform: translateX(-200px); }
+  to { transform: translateX(calc(100vw + 40px)); }
+}
 
-        /* ================= 生態場景容器 (真實背景) ================= */
-        .ecosystem-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            min-height: 780px;
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            box-shadow: 0 0 20px rgba(0,0,0,0.2);
-        }
+/* ---------- 動物 ---------- */
+.animal {
+  position: absolute;
+  left: 0;
+  top: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  will-change: transform;
+  z-index: 2;
+}
+.animal .art {
+  width: calc(var(--size) * var(--k, 1));
+  aspect-ratio: 6 / 5;
+  transform-origin: 50% 85%;
+  filter: drop-shadow(0 4px 3px rgba(0, 0, 0, .28));
+}
+.animal .art svg, .card-art svg, .quiz-art svg { width: 100%; height: 100%; display: block; overflow: visible; }
+.tag {
+  margin-top: 2px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 4px 2px 10px;
+  border-radius: 999px;
+  background: var(--paper);
+  border: 2.5px solid var(--ink);
+  font-size: var(--tag);
+  font-weight: 800;
+  line-height: 1.35;
+  white-space: nowrap;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, .25);
+}
+.tag .mv { font-size: .85em; }
+.animal:hover .art, .animal:focus-visible .art { filter: drop-shadow(0 0 8px #fff59d) drop-shadow(0 4px 3px rgba(0, 0, 0, .3)); }
+.animal:focus-visible { outline: none; }
+.animal.frozen, .animal:focus-visible { z-index: 1000 !important; }
+.animal:focus-visible .tag { outline: 4px solid #1565c0; outline-offset: 2px; }
 
-        /* 1. 天空區 */
-        .zone-sky {
-            flex: 1;
-            background: linear-gradient(rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.1)), 
-                        url('https://images.unsplash.com/photo-1513002749550-c59d786b8e6c?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
-            position: relative;
-            overflow: hidden;
-            border-bottom: 3px dashed #ffffff;
-            min-height: 230px;
-        }
+/* SVG 部件 */
+svg .o { stroke: var(--ink); stroke-width: 2.6; stroke-linejoin: round; stroke-linecap: round; }
+svg .p { transform-box: fill-box; }
+svg .eye { transform-box: fill-box; transform-origin: center; animation: blink 5s infinite; animation-delay: var(--blink, 0s); }
+@keyframes blink { 0%, 94%, 100% { transform: scaleY(1); } 97% { transform: scaleY(.1); } }
 
-        /* 2. 陸地區 (採用香港山野圖 mountain.jpg) */
-        .zone-land {
-            flex: 1.4;
-            background: linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.15)), 
-                        url('mountain.jpg') center/cover no-repeat;
-            position: relative;
-            overflow: hidden;
-            border-bottom: 4px solid #2e7d32;
-            min-height: 300px;
-        }
+.is-walking .leg-a { animation: step var(--gait, .6s) ease-in-out infinite; }
+.is-walking .leg-b { animation: step var(--gait, .6s) ease-in-out infinite; animation-delay: calc(var(--gait, .6s) * -.5); }
+@keyframes step { 0%, 100% { transform: rotate(24deg); } 50% { transform: rotate(-24deg); } }
 
-        /* 3. 水池區 (採用香港池塘圖 pond.jpg) */
-        .zone-pond {
-            flex: 1.1;
-            background: linear-gradient(rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.2)), 
-                        url('pond.jpg') center/cover no-repeat;
-            position: relative;
-            overflow: hidden;
-            min-height: 250px;
-        }
+.is-flying .wing { animation: flap var(--flap, .3s) ease-in-out infinite; }
+.is-flying .wing-far { animation-delay: calc(var(--flap, .3s) * -.08); }
+@keyframes flap { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(-.55); } }
+.is-gliding .wing { animation: none; transform: scaleY(.28); transition: transform .4s; }
+.is-folded .wing { animation: none; transform: scaleY(.12); transition: transform .1s; }
+.is-flying .bwing { animation: flutter var(--flap, .15s) ease-in-out infinite; }
+@keyframes flutter { 0%, 100% { transform: scaleX(1); } 50% { transform: scaleX(.18); } }
 
-        /* 生態區標籤 */
-        .zone-label {
-            position: absolute;
-            left: 12px;
-            top: 8px;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 1rem;
-            font-weight: bold;
-            color: #263238;
-            pointer-events: none;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-            z-index: 5;
-        }
+.is-swimming .tail-fin { animation: fin-wag var(--wag, .7s) ease-in-out infinite; }
+.is-swimming .fishbody { animation: sway var(--wag, .7s) ease-in-out infinite; }
+.is-swimming .fin { animation: fin-wag var(--wag, .7s) ease-in-out infinite reverse; }
+@keyframes fin-wag { 0%, 100% { transform: rotate(18deg); } 50% { transform: rotate(-18deg); } }
+@keyframes sway { 0%, 100% { transform: skewY(3deg); } 50% { transform: skewY(-3deg); } }
+.is-swimming .flip-f { animation: paddle var(--wag, 1.2s) ease-in-out infinite; }
+.is-swimming .flip-b { animation: paddle var(--wag, 1.2s) ease-in-out infinite; animation-delay: calc(var(--wag, 1.2s) * -.5); }
+@keyframes paddle { 0%, 100% { transform: rotate(-28deg); } 50% { transform: rotate(22deg); } }
 
-        /* ================= 動物元件結構 ================= */
-        .animal-btn {
-            position: absolute;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-decoration: none;
-            outline: none;
-            -webkit-tap-highlight-color: transparent;
-            z-index: 2;
-        }
+.wag .tail { animation: tail-wag .35s ease-in-out infinite; }
+@keyframes tail-wag { 0%, 100% { transform: rotate(-14deg); } 50% { transform: rotate(14deg); } }
+.is-idle .tail-flick { animation: tail-wag 1.6s ease-in-out infinite; }
+.is-idle .sniff { animation: sniff 1.1s ease-in-out infinite; }
+@keyframes sniff { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(12deg); } }
+.is-idle .ears { animation: ear-twitch 2.4s ease-in-out infinite; }
+@keyframes ear-twitch { 0%, 80%, 100% { transform: rotate(0); } 88% { transform: rotate(-10deg); } }
+.leg-hind, .leg-front { transition: transform .12s; }
+.is-airborne .leg-hind { transform: rotate(-32deg); }
+.is-airborne .leg-front { transform: rotate(38deg); }
 
-        .animal-btn:hover {
-            z-index: 99;
-            filter: drop-shadow(0 0 10px #ffeb3b);
-        }
+.frozen *, .scene.paused .animal * { animation-play-state: paused !important; }
 
-        /* 圖示容器（負責放大與左右翻轉） */
-        .icon-box {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: transform 0.2s ease;
-        }
+/* ---------- 頁尾 ---------- */
+.foot {
+  padding: 8px 16px;
+  text-align: center;
+  background: #3e2c25;
+  color: #fff8e7;
+  font-size: clamp(.95rem, 1.4vw, 1.1rem);
+  line-height: 1.5;
+}
 
-        .animal-btn:hover .icon-box {
-            transform: scale(1.2) !important;
-        }
+/* ---------- 動物卡 / 考考你 ---------- */
+dialog {
+  border: 0;
+  padding: 0;
+  margin: auto;
+  background: transparent;
+  max-width: min(94vw, 820px);
+  width: 100%;
+  max-height: 94vh;
+  max-height: 94dvh;
+  color: var(--ink);
+}
+dialog::backdrop { background: rgba(30, 20, 10, .55); }
+.card {
+  position: relative;
+  background: var(--paper);
+  border: 4px solid var(--ink);
+  border-radius: 28px;
+  box-shadow: 0 8px 0 var(--ink);
+  padding: clamp(16px, 3vw, 28px);
+  display: grid;
+  grid-template-columns: minmax(200px, 1fr) 1.25fr;
+  gap: clamp(14px, 2.5vw, 28px);
+  align-items: center;
+  overflow: auto;
+  max-height: 92vh;
+  max-height: 92dvh;
+}
+.close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 3px solid var(--ink);
+  background: #ffccbc;
+  font-size: 1.6rem;
+  font-weight: 900;
+  cursor: pointer;
+  z-index: 2;
+}
+.card-stage {
+  aspect-ratio: 1;
+  border-radius: 22px;
+  border: 3px solid var(--ink);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+.card-stage[data-zone="sky"] { background: linear-gradient(#7cc8f7, #e6f7ff); }
+.card-stage[data-zone="land"] { background: linear-gradient(#c9ecff 0 55%, #9ccc65 55%, #7cb342); }
+.card-stage[data-zone="pond"] { background: linear-gradient(#4fb3e8, #1e6fa8); }
+.card-art { width: 82%; aspect-ratio: 6 / 5; }
+.card-art.m-fly { animation: c-fly 2.4s ease-in-out infinite; }
+.card-art.m-walk { animation: c-walk .6s ease-in-out infinite; }
+.card-art.m-hop { animation: c-hop .9s ease-in-out infinite; }
+.card-art.m-swim { animation: c-swim 2.6s ease-in-out infinite; }
+@keyframes c-fly { 0%, 100% { transform: translateY(-6%) rotate(-4deg); } 50% { transform: translateY(6%) rotate(3deg); } }
+@keyframes c-walk { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3%); } }
+@keyframes c-hop { 0%, 30%, 100% { transform: translateY(0); } 62% { transform: translateY(-22%) rotate(-8deg); } }
+@keyframes c-swim { 0%, 100% { transform: translate(-5%, -3%); } 50% { transform: translate(5%, 3%); } }
+.card-body h2 { font-size: clamp(2rem, 4.5vw, 3rem); font-weight: 900; line-height: 1.2; margin: 4px 0 8px; }
+.chip { font-size: clamp(1.1rem, 2vw, 1.35rem); }
+.chip .mv { padding: .1em .6em; }
+.card-body p.how, .card-body p.fact { font-size: clamp(1.2rem, 2.2vw, 1.55rem); line-height: 1.6; font-weight: 600; }
+.card-body p.fact { margin-top: 8px; color: #5d4037; }
+.card-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 16px; }
+.btn-video { background: #ef5350; color: #fff; }
+.note { margin-top: 8px; font-size: 1rem; color: #6d4c41; }
 
-        .animal-svg {
-            width: 80px;
-            height: 80px;
-            filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.4));
-        }
+.quiz { grid-template-columns: 1fr; text-align: center; justify-items: center; }
+.quiz-progress { font-size: clamp(1.1rem, 2vw, 1.35rem); font-weight: 800; padding-right: 60px; }
+.quiz .card-stage { width: min(56vw, 300px); }
+.quiz h2 { font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 900; }
+.choices { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; }
+.choice {
+  min-width: 140px;
+  min-height: 84px;
+  font-size: clamp(1.6rem, 3.4vw, 2.2rem);
+  color: #fff;
+  border-color: var(--ink);
+}
+.choice[data-cat="fly"] { background: var(--fly); }
+.choice[data-cat="walk"] { background: var(--walk); }
+.choice[data-cat="swim"] { background: var(--swim); }
+.choice:disabled { opacity: .45; cursor: default; }
+.choice.right { opacity: 1; outline: 5px solid #43a047; outline-offset: 3px; }
+.feedback { min-height: 2.6em; font-size: clamp(1.2rem, 2.4vw, 1.6rem); font-weight: 800; line-height: 1.35; }
+.feedback.good { color: #2e7d32; }
+.feedback.try { color: #c62828; }
+.stars { font-size: clamp(2rem, 6vw, 3.4rem); letter-spacing: .1em; }
 
-        /* 文字標籤（始終保持正向） */
-        .animal-tag {
-            background: #ffffff;
-            color: #111111;
-            padding: 3px 10px;
-            border-radius: 15px;
-            font-size: 1.05rem;
-            font-weight: bold;
-            border: 2px solid #ff9800;
-            box-shadow: 0 3px 6px rgba(0,0,0,0.3);
-            margin-top: 2px;
-            white-space: nowrap;
-        }
-
-        .action-badge {
-            font-size: 0.85rem;
-            color: #e65100;
-        }
-
-        /* ================= 動畫獨立解耦 (移動 vs 轉向) ================= */
-
-        /* 1. 位置移動 Keyframes */
-        @keyframes pathLeftToRight {
-            0% { left: -12%; }
-            48% { left: 85%; }
-            50% { left: 85%; }
-            98% { left: -12%; }
-            100% { left: -12%; }
-        }
-
-        @keyframes pathRightToLeft {
-            0% { left: 85%; }
-            48% { left: -12%; }
-            50% { left: -12%; }
-            98% { left: 85%; }
-            100% { left: 85%; }
-        }
-
-        /* 2. 圖示轉向 Keyframes */
-        @keyframes flipFacingL2R {
-            0%, 48% { transform: scaleX(1); }
-            50%, 98% { transform: scaleX(-1); }
-            100% { transform: scaleX(1); }
-        }
-
-        @keyframes flipFacingR2L {
-            0%, 48% { transform: scaleX(-1); }
-            50%, 98% { transform: scaleX(1); }
-            100% { transform: scaleX(-1); }
-        }
-
-        /* ----- 各動物移動與位置調整 ----- */
-
-        /* 天空：黑臉琵鷺 */
-        .anim-spoonbill {
-            top: 8%;
-            animation: pathLeftToRight 18s infinite linear;
-        }
-        .anim-spoonbill .icon-box { animation: flipFacingL2R 18s infinite linear; }
-
-        /* 天空：白鴿 */
-        .anim-pigeon {
-            top: 25%;
-            animation: pathLeftToRight 15s infinite linear;
-            animation-delay: -4s;
-        }
-        .anim-pigeon .icon-box { animation: flipFacingL2R 15s infinite linear; animation-delay: -4s; }
-
-        /* 天空：麻雀 (★已向上調高，避免檔字) */
-        .anim-sparrow {
-            top: 42%;
-            animation: pathRightToLeft 11s infinite linear;
-        }
-        .anim-sparrow .icon-box { animation: flipFacingR2L 11s infinite linear; }
-
-        /* 陸地：野豬 */
-        .anim-boar {
-            bottom: 6%;
-            animation: pathRightToLeft 18s infinite linear;
-        }
-        .anim-boar .icon-box { animation: flipFacingR2L 18s infinite linear; }
-
-        /* 陸地：小狗 */
-        .anim-dog {
-            bottom: 26%;
-            animation: pathLeftToRight 14s infinite linear;
-            animation-delay: -3s;
-        }
-        .anim-dog .icon-box { animation: flipFacingL2R 14s infinite linear; animation-delay: -3s; }
-
-        /* 陸地：小貓 */
-        .anim-cat {
-            bottom: 46%;
-            animation: pathRightToLeft 16s infinite linear;
-            animation-delay: -8s;
-        }
-        .anim-cat .icon-box { animation: flipFacingR2L 16s infinite linear; animation-delay: -8s; }
-
-        /* 陸地：兔子 */
-        .anim-rabbit {
-            bottom: 66%;
-            animation: pathLeftToRight 13s infinite linear;
-            animation-delay: -5s;
-        }
-        .anim-rabbit .icon-box { animation: flipFacingL2R 13s infinite linear; animation-delay: -5s; }
-
-        /* 陸地：赤腹松鼠 */
-        .anim-squirrel {
-            bottom: 36%;
-            animation: pathRightToLeft 22s infinite linear;
-            animation-delay: -12s;
-        }
-        .anim-squirrel .icon-box { animation: flipFacingR2L 22s infinite linear; animation-delay: -12s; }
-
-        /* 水池：鯉魚 */
-        .anim-carp {
-            top: 12%;
-            animation: pathRightToLeft 15s infinite linear;
-        }
-        .anim-carp .icon-box { animation: flipFacingR2L 15s infinite linear; }
-
-        /* 水池：龜 (★已向上調高，避免底欄遮擋) */
-        .anim-turtle {
-            top: 38%;
-            animation: pathLeftToRight 22s infinite linear;
-            animation-delay: -6s;
-        }
-        .anim-turtle .icon-box { animation: flipFacingL2R 22s infinite linear; animation-delay: -6s; }
-
-        /* ================= 頁尾說明 ================= */
-        footer {
-            background-color: #263238;
-            color: #ffffff;
-            text-align: center;
-            padding: 10px;
-            font-size: 0.95rem;
-        }
-
-        @media (max-width: 600px) {
-            .animal-svg {
-                width: 65px;
-                height: 65px;
-            }
-            .animal-tag {
-                font-size: 0.9rem;
-                padding: 2px 7px;
-            }
-        }
-    </style>
+/* ---------- 響應式 ---------- */
+@media (orientation: portrait) {
+  :root { --size: clamp(60px, min(11vw, 9vh), 120px); --tag: clamp(15px, 2.3vw, 22px); }
+  .zone-sky { flex: 1; }
+  .zone-land { flex: 1.2; }
+  .zone-pond { flex: 1; }
+}
+@media (max-width: 720px) {
+  .card { grid-template-columns: 1fr; text-align: center; }
+  .card-stage { width: min(70vw, 280px); margin: 0 auto; }
+  .card-actions { justify-content: center; }
+  .btn { padding: 0 14px; }
+}
+@media (max-height: 560px) and (orientation: landscape) {
+  .title p { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+</style>
 </head>
 <body>
 
-    <header>
-        <h1>🔍 香港動物大探究</h1>
-        <div class="subtitle">👉 點擊會動的動物，觀察牠們點樣活動啦！</div>
-    </header>
+<header class="top">
+  <div class="title">
+    <h1>🔍 香港動物大探究</h1>
+    <p>動物會<span class="mv mv-fly">飛</span>、會<span class="mv mv-walk">走</span>、會<span class="mv mv-swim">游</span>。按一按動物，看看牠怎樣活動！</p>
+  </div>
+  <div class="controls">
+    <button class="btn" id="btn-pause" type="button" aria-pressed="false">⏸ 停一停</button>
+    <button class="btn btn-quiz" id="btn-quiz" type="button">⭐ 考考你</button>
+    <button class="btn" id="btn-sound" type="button" aria-pressed="true" aria-label="聲音">🔊</button>
+  </div>
+</header>
 
-    <main class="ecosystem-container">
-        
-        <!-- ================= 1. 天空區域 (飛行) ================= -->
-        <section class="zone-sky">
-            <div class="zone-label">天空 ☁️ (飛行)</div>
+<main class="scene" id="scene" aria-label="動物場景：天空、陸地和池塘">
+  <section class="zone zone-sky" data-zone="sky" aria-label="天空">
+    <div class="zone-label">☁️ 天空 <span class="mv mv-fly">飛行</span></div>
+  </section>
+  <section class="zone zone-land" data-zone="land" aria-label="陸地">
+    <div class="zone-label">🌳 陸地 <span class="mv mv-walk">走動</span></div>
+  </section>
+  <section class="zone zone-pond" data-zone="pond" aria-label="池塘">
+    <div class="zone-label">💧 池塘 <span class="mv mv-swim">游動</span></div>
+  </section>
+</main>
 
-            <!-- 動物 1: 黑臉琵鷺 -->
-            <a href="https://www.youtube.com/results?search_query=香港+黑臉琵鷺+飛行" 
-               target="_blank" class="animal-btn anim-spoonbill" onclick="playAudio()" title="點擊觀察黑臉琵鷺飛行">
-                <div class="icon-box">
-                    <svg class="animal-svg" viewBox="0 0 100 100">
-                        <path d="M20,50 Q40,20 70,40 Q90,50 60,70 Q40,80 20,50 Z" fill="#ffffff" stroke="#e0e0e0" stroke-width="2"/>
-                        <path d="M30,45 Q50,10 65,35" fill="#f5f5f5"/>
-                        <circle cx="68" cy="42" r="6" fill="#000000"/>
-                        <path d="M72,42 Q85,40 92,45 Q85,50 72,44 Z" fill="#000000"/>
-                        <circle cx="66" cy="40" r="1.5" fill="#ffffff"/>
-                    </svg>
-                </div>
-                <div class="animal-tag">黑臉琵鷺 <span class="action-badge">(飛)</span></div>
-            </a>
+<footer class="foot">
+  💡 按動物看介紹，再按「考考你」做小測驗。適合小一常識科／科學科「動物的活動方式」自主學習。
+</footer>
 
-            <!-- 動物 2: 白鴿 -->
-            <a href="https://www.youtube.com/results?search_query=香港+白鴿+飛行" 
-               target="_blank" class="animal-btn anim-pigeon" onclick="playAudio()" title="點擊觀察白鴿飛行">
-                <div class="icon-box">
-                    <svg class="animal-svg" viewBox="0 0 100 100">
-                        <path d="M25,55 Q45,35 68,45 Q80,50 65,68 Q45,75 25,55 Z" fill="#eceff1"/>
-                        <path d="M35,50 Q50,15 65,35 Z" fill="#cfd8dc"/>
-                        <polygon points="25,55 10,50 15,62" fill="#b0bec5"/>
-                        <circle cx="70" cy="42" r="10" fill="#eceff1"/>
-                        <circle cx="72" cy="40" r="2" fill="#000"/>
-                        <polygon points="78,42 86,45 78,47" fill="#ff8a80"/>
-                    </svg>
-                </div>
-                <div class="animal-tag">白鴿 <span class="action-badge">(飛)</span></div>
-            </a>
+<dialog id="card" aria-labelledby="card-name">
+  <div class="card">
+    <button class="close" type="button" data-close aria-label="關閉">✕</button>
+    <div class="card-stage" id="card-stage"><div class="card-art" id="card-art"></div></div>
+    <div class="card-body">
+      <p class="chip" id="card-chip"></p>
+      <h2 id="card-name"></h2>
+      <p class="how" id="card-how"></p>
+      <p class="fact" id="card-fact"></p>
+      <div class="card-actions">
+        <button class="btn" type="button" id="card-speak">🔊 讀出來</button>
+        <a class="btn btn-video" id="card-video" target="_blank" rel="noopener">▶ 看短片</a>
+      </div>
+      <p class="note">短片會在 YouTube 打開，請和老師或家長一起看。</p>
+    </div>
+  </div>
+</dialog>
 
-            <!-- 動物 3: 麻雀 -->
-            <a href="https://www.youtube.com/results?search_query=香港+麻雀+飛行" 
-               target="_blank" class="animal-btn anim-sparrow" onclick="playAudio()" title="點擊觀察麻雀飛行">
-                <div class="icon-box">
-                    <svg class="animal-svg" viewBox="0 0 100 100">
-                        <ellipse cx="45" cy="50" rx="22" ry="18" fill="#8d6e63"/>
-                        <ellipse cx="42" cy="55" rx="16" ry="12" fill="#d7ccc8"/>
-                        <circle cx="62" cy="40" r="13" fill="#6d4c41"/>
-                        <circle cx="65" cy="43" r="3.5" fill="#000000"/>
-                        <circle cx="64" cy="38" r="2" fill="#ffffff"/>
-                        <polygon points="74,40 83,43 74,46" fill="#212121"/>
-                        <path d="M35,45 Q20,30 38,35" stroke="#4e342e" stroke-width="4" fill="none"/>
-                    </svg>
-                </div>
-                <div class="animal-tag">麻雀 <span class="action-badge">(飛)</span></div>
-            </a>
-        </section>
+<dialog id="quiz" aria-labelledby="quiz-q">
+  <div class="card quiz" id="quiz-box"></div>
+</dialog>
 
-        <!-- ================= 2. 陸地區域 (香港山野 - 走動) ================= -->
-        <section class="zone-land">
-            <div class="zone-label">香港山野 ⛰️ (走動)</div>
+<noscript><p style="padding:16px;font-size:1.3rem;text-align:center">請開啟 JavaScript，動物才會動起來。</p></noscript>
 
-            <!-- 動物 4: 野豬 -->
-            <a href="https://www.youtube.com/results?search_query=香港+野豬+走動" 
-               target="_blank" class="animal-btn anim-boar" onclick="playAudio()" title="點擊觀察野豬走動">
-                <div class="icon-box">
-                    <svg class="animal-svg" viewBox="0 0 100 100">
-                        <ellipse cx="50" cy="55" rx="35" ry="22" fill="#5d4037"/>
-                        <circle cx="25" cy="50" r="16" fill="#4e342e"/>
-                        <ellipse cx="12" cy="52" rx="6" ry="5" fill="#795548"/>
-                        <rect x="30" y="70" width="6" height="15" rx="3" fill="#212121"/>
-                        <rect x="42" y="70" width="6" height="15" rx="3" fill="#212121"/>
-                        <rect x="58" y="70" width="6" height="15" rx="3" fill="#212121"/>
-                        <rect x="70" y="70" width="6" height="15" rx="3" fill="#212121"/>
-                        <circle cx="22" cy="46" r="2" fill="#000000"/>
-                        <path d="M16,56 Q14,60 18,58" stroke="#ffffff" stroke-width="2.5" fill="none"/>
-                    </svg>
-                </div>
-                <div class="animal-tag">野豬 <span class="action-badge">(走)</span></div>
-            </a>
+<script>
+(() => {
+"use strict";
 
-            <!-- 動物 5: 小狗 -->
-            <a href="https://www.youtube.com/results?search_query=小狗+走動" 
-               target="_blank" class="animal-btn anim-dog" onclick="playAudio()" title="點擊觀察小狗走動">
-                <div class="icon-box">
-                    <svg class="animal-svg" viewBox="0 0 100 100">
-                        <ellipse cx="45" cy="58" rx="22" ry="16" fill="#8d6e63"/>
-                        <path d="M23,55 Q12,45 15,35" stroke="#8d6e63" stroke-width="5" fill="none" stroke-linecap="round"/>
-                        <rect x="30" y="70" width="5" height="12" rx="2" fill="#6d4c41"/>
-                        <rect x="40" y="70" width="5" height="12" rx="2" fill="#6d4c41"/>
-                        <rect x="52" y="70" width="5" height="12" rx="2" fill="#6d4c41"/>
-                        <circle cx="68" cy="45" r="13" fill="#8d6e63"/>
-                        <ellipse cx="75" cy="48" rx="7" ry="5" fill="#d7ccc8"/>
-                        <circle cx="78" cy="46" r="2.5" fill="#000"/>
-                        <circle cx="65" cy="41" r="2" fill="#000"/>
-                        <path d="M60,38 Q52,35 55,50" stroke="#5d4037" stroke-width="6" fill="none" stroke-linecap="round"/>
-                    </svg>
-                </div>
-                <div class="animal-tag">小狗 <span class="action-badge">(走)</span></div>
-            </a>
+/* ================= 插圖（全部面向右方） ================= */
+const eye = (x, y, r = 4) =>
+  `<g class="eye"><circle cx="${x}" cy="${y}" r="${r}" fill="#2a1f1b"/><circle cx="${x + r * .32}" cy="${y - r * .35}" r="${r * .38}" fill="#fff"/></g>`;
+const blush = (x, y, rx = 4.5, ry = 2.8) => `<ellipse cx="${x}" cy="${y}" rx="${rx}" ry="${ry}" fill="#ff8fa3" opacity=".6"/>`;
+const tube = (d, w, fill) =>
+  `<path d="${d}" stroke="#43302b" stroke-width="${w + 5}" fill="none" stroke-linecap="round"/><path d="${d}" stroke="${fill}" stroke-width="${w}" fill="none" stroke-linecap="round"/>`;
+const leg = (x, y, w, h, fill, cls, paw) =>
+  `<g class="p ${cls}" style="transform-origin:50% 8%"><rect class="o" x="${x}" y="${y}" width="${w}" height="${h}" rx="${w / 2}" fill="${fill}"/>${paw ? `<rect x="${x + 1.3}" y="${y + h - 6}" width="${w - 2.6}" height="4.6" rx="2.3" fill="${paw}"/>` : ""}</g>`;
+const svg = inner => `<svg viewBox="0 0 120 100" aria-hidden="true" focusable="false">${inner}</svg>`;
 
-            <!-- 動物 6: 小貓 -->
-            <a href="https://www.youtube.com/results?search_query=小貓+走動" 
-               target="_blank" class="animal-btn anim-cat" onclick="playAudio()" title="點擊觀察小貓走動">
-                <div class="icon-box">
-                    <svg class="animal-svg" viewBox="0 0 100 100">
-                        <ellipse cx="45" cy="60" rx="20" ry="16" fill="#ff9800"/>
-                        <path d="M25,60 Q10,50 15,35" stroke="#ff9800" stroke-width="5" fill="none" stroke-linecap="round"/>
-                        <circle cx="65" cy="45" r="14" fill="#ff9800"/>
-                        <polygon points="58,35 62,20 68,34" fill="#ff9800"/>
-                        <polygon points="68,34 74,20 78,35" fill="#ff9800"/>
-                        <polygon points="60,33 63,23 66,33" fill="#ffe0b2"/>
-                        <polygon points="70,33 73,23 76,33" fill="#ffe0b2"/>
-                        <circle cx="62" cy="43" r="2" fill="#000"/>
-                        <circle cx="70" cy="43" r="2" fill="#000"/>
-                        <polygon points="65,47 67,47 66,49" fill="#ff4081"/>
-                        <path d="M55,46 L48,44 M55,48 L48,48 M75,46 L82,44 M75,48 L82,48" stroke="#333" stroke-width="1.2"/>
-                    </svg>
-                </div>
-                <div class="animal-tag">小貓 <span class="action-badge">(走)</span></div>
-            </a>
+const ART = {
+  spoonbill: () => svg(`
+    <g class="p wing wing-far" style="transform-origin:50% 100%"><path class="o" d="M50,49 C48,30 62,14 86,9 C82,23 76,37 72,49 Z" fill="#e3e9ec"/></g>
+    <path d="M32,58 L8,63 M32,61 L10,69" stroke="#43302b" stroke-width="3.4" stroke-linecap="round"/>
+    <path class="o" d="M33,51 L19,53 L32,61 Z" fill="#fff"/>
+    ${tube("M68,53 Q80,46 90,47", 7, "#fff")}
+    <ellipse class="o" cx="52" cy="56" rx="24" ry="13" fill="#fff"/>
+    <ellipse cx="68" cy="60" rx="6" ry="4" fill="#ffe08a"/>
+    <circle class="o" cx="92" cy="46" r="9.5" fill="#fff"/>
+    <path d="M89,37.5 Q101,39 101.5,46 Q100.5,53 89,54.5 Q95,46 89,37.5 Z" fill="#2b2b2b"/>
+    <circle cx="94" cy="44" r="3.4" fill="#fff"/><g class="eye"><circle cx="94.6" cy="44" r="2" fill="#2a1f1b"/></g>
+    <path class="o" d="M100,44.5 L110,47 Q119,45.5 119,50 Q118,54.5 110,52 L100,48.5 Z" fill="#333"/>
+    <g class="p wing wing-near" style="transform-origin:50% 100%"><path class="o" d="M40,51 C38,31 52,11 80,5 C76,21 70,37 66,51 Z" fill="#fff"/><path d="M53,26 Q63,17 76,10" stroke="#cfd8dc" stroke-width="2.2" fill="none"/></g>`),
 
-            <!-- 動物 7: 兔子 -->
-            <a href="https://www.youtube.com/results?search_query=兔子+走動" 
-               target="_blank" class="animal-btn anim-rabbit" onclick="playAudio()" title="點擊觀察兔子跳走">
-                <div class="icon-box">
-                    <svg class="animal-svg" viewBox="0 0 100 100">
-                        <ellipse cx="40" cy="60" rx="18" ry="15" fill="#ffffff" stroke="#e0e0e0" stroke-width="1.5"/>
-                        <circle cx="20" cy="62" r="5" fill="#ffffff"/>
-                        <circle cx="60" cy="50" r="12" fill="#ffffff" stroke="#e0e0e0" stroke-width="1.5"/>
-                        <ellipse cx="55" cy="28" rx="4" ry="14" fill="#ffffff" stroke="#e0e0e0" stroke-width="1.5"/>
-                        <ellipse cx="55" cy="28" rx="2" ry="10" fill="#ff80ab"/>
-                        <ellipse cx="63" cy="28" rx="4" ry="14" fill="#ffffff" stroke="#e0e0e0" stroke-width="1.5"/>
-                        <ellipse cx="63" cy="28" rx="2" ry="10" fill="#ff80ab"/>
-                        <circle cx="64" cy="48" r="2" fill="#000"/>
-                        <circle cx="67" cy="52" r="1.5" fill="#ff80ab"/>
-                    </svg>
-                </div>
-                <div class="animal-tag">兔子 <span class="action-badge">(跳走)</span></div>
-            </a>
+  pigeon: () => svg(`
+    <g class="p wing wing-far" style="transform-origin:50% 100%"><path class="o" d="M46,47 C42,29 54,15 76,11 C74,25 70,37 66,47 Z" fill="#d5dbe3"/></g>
+    <path class="o" d="M32,53 L12,48 L14,61 L34,61 Z" fill="#e3e8ee"/>
+    <path d="M50,68 l-3,6 M58,68 l-2,6" stroke="#f08a8a" stroke-width="3.2" stroke-linecap="round"/>
+    <path class="o" d="M30,55 C30,41 50,37 66,41 C78,44 83,53 78,61 C71,71 46,73 30,55 Z" fill="#f7f9fb"/>
+    <circle class="o" cx="80" cy="38" r="11.5" fill="#f7f9fb"/>
+    <path d="M71,47 Q78,53 87,46" stroke="#a5dccd" stroke-width="3" fill="none" opacity=".9"/>
+    <path class="o" d="M90,36.5 L99,40 L90,43.5 Z" fill="#f2a65a"/>
+    <ellipse cx="90" cy="36" rx="2.6" ry="1.6" fill="#fff" stroke="#c9ced6" stroke-width=".8"/>
+    ${eye(83, 35, 3.6)}${blush(81, 43, 3.6, 2.3)}
+    <g class="p wing wing-near" style="transform-origin:50% 100%"><path class="o" d="M40,50 C36,29 50,11 75,6 C73,22 69,36 63,50 Z" fill="#fff"/><path d="M62,13 Q69,8 75,6 Q73,14 70,19 Z" fill="#c4ccd6"/></g>`),
 
-            <!-- 動物 8: 赤腹松鼠 -->
-            <a href="https://www.youtube.com/results?search_query=香港+赤腹松鼠+活動" 
-               target="_blank" class="animal-btn anim-squirrel" onclick="playAudio()" title="點擊觀察赤腹松鼠走動">
-                <div class="icon-box">
-                    <svg class="animal-svg" viewBox="0 0 100 100">
-                        <path d="M60,65 Q95,60 85,25 Q70,10 60,35 Z" fill="#d84315"/>
-                        <ellipse cx="45" cy="55" rx="18" ry="22" fill="#6d4c41"/>
-                        <path d="M35,45 Q45,45 45,70 Q35,65 35,45 Z" fill="#bf360c"/>
-                        <circle cx="35" cy="35" r="12" fill="#6d4c41"/>
-                        <polygon points="30,25 35,15 38,25" fill="#6d4c41"/>
-                        <circle cx="31" cy="33" r="2" fill="#000"/>
-                    </svg>
-                </div>
-                <div class="animal-tag">赤腹松鼠 <span class="action-badge">(跳走)</span></div>
-            </a>
-        </section>
+  sparrow: () => svg(`
+    <g class="p wing wing-far" style="transform-origin:50% 100%"><path class="o" d="M45,49 C43,33 53,19 71,15 C69,27 65,39 61,49 Z" fill="#7d4f33"/></g>
+    <path class="o" d="M32,55 L14,51 L16,62 L34,62 Z" fill="#7a4e33"/>
+    <ellipse class="o" cx="53" cy="57" rx="22" ry="15" fill="#c9a27e"/>
+    <ellipse cx="57" cy="63" rx="14" ry="8" fill="#f1e6d6"/>
+    <circle class="o" cx="75" cy="43" r="13.5" fill="#8b4a2b"/>
+    <ellipse cx="77" cy="48.5" rx="8.5" ry="6" fill="#fff"/>
+    <circle cx="76.5" cy="49" r="2.4" fill="#2a2a2a"/>
+    <path d="M84,52 Q88,56 84,60 Q80,56 84,52 Z" fill="#2a2a2a"/>
+    ${eye(80, 41, 3.5)}
+    <path class="o" d="M87,41 L95,44 L87,47 Z" fill="#3a3030"/>
+    <g class="p wing wing-near" style="transform-origin:50% 100%"><path class="o" d="M40,51 C38,33 50,17 70,11 C68,25 64,39 60,51 Z" fill="#9b6a45"/><path d="M48,41 L63,23 M53,45 L66,31" stroke="#5c3a24" stroke-width="2.6" stroke-linecap="round"/><path d="M45,47 L61,41" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></g>`),
 
-        <!-- ================= 3. 池塘區域 (香港園林池塘 - 游動) ================= -->
-        <section class="zone-pond">
-            <div class="zone-label">池塘 🐟 (游動)</div>
+  butterfly: () => {
+    const half = `
+      <path class="o" d="M58,48 C40,20 14,22 17,40 C19,53 40,57 58,52 Z" fill="#ffb627"/>
+      <path class="o" d="M58,55 C44,58 30,72 38,81 C46,88 56,72 58,59 Z" fill="#ff7f3f"/>
+      <path d="M22,34 C24,26 32,25 36,28" stroke="#43302b" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <circle cx="31" cy="42" r="4" fill="#fff"/><circle cx="43" cy="44" r="3" fill="#43302b"/><circle cx="45" cy="71" r="3" fill="#fff"/>`;
+    return svg(`
+      <g class="p bwing" style="transform-origin:100% 50%">${half}</g>
+      <g class="p bwing" style="transform-origin:0% 50%"><g transform="matrix(-1 0 0 1 120 0)">${half}</g></g>
+      <path d="M58,33 Q52,22 47,19 M62,33 Q68,22 73,19" stroke="#43302b" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+      <circle cx="47" cy="19" r="2.4" fill="#43302b"/><circle cx="73" cy="19" r="2.4" fill="#43302b"/>
+      <ellipse class="o" cx="60" cy="57" rx="4.5" ry="17" fill="#5a4038"/>
+      <circle class="o" cx="60" cy="38" r="6.5" fill="#5a4038"/>
+      <circle cx="57.6" cy="37" r="1.7" fill="#fff"/><circle cx="62.4" cy="37" r="1.7" fill="#fff"/>`);
+  },
 
-            <!-- 動物 9: 鯉魚 -->
-            <a href="https://www.youtube.com/results?search_query=鯉魚+游水" 
-               target="_blank" class="animal-btn anim-carp" onclick="playAudio()" title="點擊觀察鯉魚游動">
-                <div class="icon-box">
-                    <svg class="animal-svg" viewBox="0 0 100 100">
-                        <path d="M20,50 Q45,25 75,48 Q85,50 75,55 Q45,75 20,50 Z" fill="#ff3d00"/>
-                        <ellipse cx="50" cy="42" rx="12" ry="6" fill="#ffffff" opacity="0.8"/>
-                        <path d="M20,50 L5,35 L12,50 L5,65 Z" fill="#ff6e40"/>
-                        <path d="M55,33 Q62,20 68,30 Z" fill="#ff6e40"/>
-                        <path d="M55,63 Q62,75 68,67 Z" fill="#ff6e40"/>
-                        <circle cx="72" cy="44" r="2.5" fill="#000000"/>
-                        <circle cx="73" cy="43" r="0.8" fill="#ffffff"/>
-                        <path d="M76,50 Q82,53 85,50" stroke="#ffeb3b" stroke-width="1.5" fill="none"/>
-                    </svg>
-                </div>
-                <div class="animal-tag">鯉魚 <span class="action-badge">(游)</span></div>
-            </a>
+  boar: () => svg(`
+    <g class="p tail-flick" style="transform-origin:100% 0%"><path d="M21,47 Q11,45 12,54" stroke="#43302b" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M12,54 l-3,4 l5,-1 z" fill="#43302b"/></g>
+    ${leg(36, 62, 9, 27, "#3d302a", "leg-b", "#1f1714")}${leg(74, 62, 9, 27, "#3d302a", "leg-a", "#1f1714")}
+    <path class="o" d="M18,51 C18,35 40,29 62,31 C82,33 92,41 93,53 C93,67 80,73 56,73 C34,73 18,67 18,51 Z" fill="#6b5546"/>
+    <path d="M36,33 l3,-6 l3,5 l3,-6 l3,5 l3,-6 l3,5 l3,-6 l3,5 l3,-5 l3,5" stroke="#43302b" stroke-width="2.4" fill="none" stroke-linejoin="round"/>
+    <path d="M30,65 Q56,75 82,63" stroke="#8d7564" stroke-width="5" fill="none" opacity=".7" stroke-linecap="round"/>
+    ${leg(26, 63, 9.5, 27, "#55443a", "leg-a", "#1f1714")}${leg(66, 63, 9.5, 27, "#55443a", "leg-b", "#1f1714")}
+    <g class="p sniff" style="transform-origin:0% 30%">
+      <path class="o" d="M84,38 L83,26 L93,35 Z" fill="#5a4639"/>
+      <ellipse class="o" cx="93" cy="50" rx="16" ry="13.5" fill="#7a6252"/>
+      <ellipse class="o" cx="108" cy="54" rx="6" ry="7.5" fill="#dcaaa0"/>
+      <ellipse cx="107" cy="51.5" rx="1.3" ry="2" fill="#43302b"/><ellipse cx="110" cy="52" rx="1.3" ry="2" fill="#43302b"/>
+      ${tube("M100,62 Q105,61 106,56", 2.2, "#fffaf0")}
+      ${eye(96, 45, 3.5)}${blush(98, 54)}
+    </g>`),
 
-            <!-- 動物 10: 龜 -->
-            <a href="https://www.youtube.com/results?search_query=烏龜+游水" 
-               target="_blank" class="animal-btn anim-turtle" onclick="playAudio()" title="點擊觀察龜游動">
-                <div class="icon-box">
-                    <svg class="animal-svg" viewBox="0 0 100 100">
-                        <path d="M55,30 Q70,10 80,25 Z" fill="#4caf50"/>
-                        <path d="M55,70 Q70,90 80,75 Z" fill="#4caf50"/>
-                        <path d="M25,38 Q15,30 20,40 Z" fill="#388e3c"/>
-                        <path d="M25,62 Q15,70 20,60 Z" fill="#388e3c"/>
-                        <ellipse cx="45" cy="50" rx="26" ry="20" fill="#2e7d32"/>
-                        <ellipse cx="45" cy="50" rx="20" ry="14" fill="#43a047"/>
-                        <circle cx="75" cy="50" r="9" fill="#4caf50"/>
-                        <circle cx="77" cy="47" r="1.5" fill="#000"/>
-                    </svg>
-                </div>
-                <div class="animal-tag">龜 <span class="action-badge">(游)</span></div>
-            </a>
-        </section>
+  dog: () => svg(`
+    <g class="p tail" style="transform-origin:100% 100%">${tube("M26,50 Q13,42 15,29", 5, "#e3a05f")}</g>
+    ${leg(38, 62, 8.5, 25, "#c8853f", "leg-b", "#fbe7c9")}${leg(70, 62, 8.5, 25, "#c8853f", "leg-a", "#fbe7c9")}
+    <ellipse class="o" cx="50" cy="58" rx="28" ry="15" fill="#e3a05f"/>
+    <ellipse cx="54" cy="65" rx="18" ry="6.5" fill="#fbe7c9"/>
+    ${leg(28, 63, 9, 25, "#e3a05f", "leg-a", "#fbe7c9")}${leg(62, 63, 9, 25, "#e3a05f", "leg-b", "#fbe7c9")}
+    <path d="M70,52 Q77,59 86,56" stroke="#e53950" stroke-width="5" fill="none" stroke-linecap="round"/><circle cx="79" cy="59" r="3" fill="#ffd54f" stroke="#43302b" stroke-width="1.2"/>
+    <circle class="o" cx="83" cy="40" r="16" fill="#e3a05f"/>
+    <ellipse class="o" cx="95" cy="47" rx="9.5" ry="7.5" fill="#fbe7c9"/>
+    <path d="M96,52 Q98,59 101,52 Z" fill="#ff7b8a" stroke="#43302b" stroke-width="1.2"/>
+    <path d="M94,51 Q98,54 102,51" stroke="#43302b" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    <ellipse cx="102" cy="44.5" rx="3.8" ry="3" fill="#2a1f1b"/>
+    ${eye(88, 37, 3.8)}${blush(86, 46)}
+    <path class="o" d="M73,27 C64,27 61,40 65,51 C72,49 77,39 77,30 Z" fill="#8a5a35"/>`),
 
-    </main>
+  cat: () => svg(`
+    <g class="p tail tail-flick" style="transform-origin:100% 100%">${tube("M27,57 Q8,50 13,27", 5, "#f4a340")}</g>
+    ${leg(38, 64, 8, 24, "#d98a2b", "leg-b", "#fff6ea")}${leg(68, 64, 8, 24, "#d98a2b", "leg-a", "#fff6ea")}
+    <ellipse class="o" cx="50" cy="61" rx="26" ry="13" fill="#f4a340"/>
+    <path d="M40,49 Q42,55 40,61 M50,48 Q52,54 50,60 M60,49 Q62,55 60,61" stroke="#d27a1e" stroke-width="3" fill="none" stroke-linecap="round"/>
+    ${leg(29, 65, 8.5, 24, "#f4a340", "leg-a", "#fff6ea")}${leg(61, 65, 8.5, 24, "#f4a340", "leg-b", "#fff6ea")}
+    <path class="o" d="M71,33 L72,15 L83,28 Z" fill="#f4a340"/><path d="M73.5,29 L74,20 L80,27 Z" fill="#ffb3a7"/>
+    <path class="o" d="M87,28 L98,16 L98,35 Z" fill="#f4a340"/><path d="M90,28 L96,21 L96,31 Z" fill="#ffb3a7"/>
+    <circle class="o" cx="85" cy="41" r="15.5" fill="#f4a340"/>
+    <path d="M80,27.5 l1,5 M85,26.5 l0,5.5 M90,27.5 l-1,5" stroke="#d27a1e" stroke-width="2.4" stroke-linecap="round"/>
+    <ellipse cx="91" cy="48" rx="8.5" ry="5.8" fill="#fff6ea"/>
+    <path d="M91,44.5 l4,0 l-2,2.8 z" fill="#ff7b8a"/>
+    <path d="M90,49 Q93,52 96,49" stroke="#43302b" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+    ${eye(81, 39, 3.4)}${eye(93, 39, 3.4)}${blush(79, 47, 3.6, 2.3)}
+    <path d="M98,46 L109,43 M98,49 L109,50" stroke="#43302b" stroke-width="1.3" stroke-linecap="round"/>`),
 
-    <footer>
-        💡 提示：點擊動物圖示即可開啟觀察短片。適合小一常識科／科學科「動物的活動方式」自主學習。
-    </footer>
+  rabbit: () => svg(`
+    <circle class="o" cx="23" cy="56" r="7.5" fill="#fff"/>
+    <g class="p ears" style="transform-origin:30% 100%">
+      <path class="o" d="M79,34 C79,13 85,4 90,8 C94,14 88,27 84,37 Z" fill="#ece6e1"/>
+      <path class="o" d="M70,35 C62,11 66,1 72,3 C78,7 79,23 77,35 Z" fill="#f8f5f2"/>
+      <path d="M71,31 C66,13 69,7 72,8 C75,11 75,23 74.5,31 Z" fill="#ffb3c4"/>
+    </g>
+    <ellipse class="o" cx="48" cy="61" rx="24" ry="18" fill="#f8f5f2"/>
+    <g class="p leg-hind" style="transform-origin:60% 20%">
+      <ellipse class="o" cx="35" cy="70" rx="15" ry="11" fill="#f1ece8"/>
+      <ellipse class="o" cx="40" cy="82" rx="14" ry="5" fill="#f1ece8"/>
+    </g>
+    <g class="p leg-front" style="transform-origin:50% 0%"><rect class="o" x="62" y="70" width="8.5" height="16" rx="4.2" fill="#f8f5f2"/></g>
+    <circle class="o" cx="80" cy="45" r="14.5" fill="#f8f5f2"/>
+    ${eye(85, 42, 3.8)}${blush(86, 51)}
+    <path d="M93.5,46.5 l3,1.6 l-3,1.6 z" fill="#ff8fa3"/>
+    <path d="M90,52 Q93,54 95,51.5" stroke="#43302b" stroke-width="1.5" fill="none" stroke-linecap="round"/>`),
 
-    <!-- Web Audio API 點擊提示音 -->
-    <script>
-        function playAudio() {
-            try {
-                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(587.33, audioCtx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.15);
+  squirrel: () => svg(`
+    <g class="p tail tail-flick" style="transform-origin:100% 100%">
+      <path class="o" d="M38,68 C12,68 3,46 10,27 C16,12 35,8 42,20 C31,24 27,34 33,45 C37,53 43,60 38,68 Z" fill="#8a6a55"/>
+      <path d="M15,32 C19,21 30,17 35,22" stroke="#b39580" stroke-width="3" fill="none" stroke-linecap="round"/>
+    </g>
+    <ellipse class="o" cx="57" cy="62" rx="20" ry="16" fill="#8a6a55" transform="rotate(-20 57 62)"/>
+    <ellipse cx="65" cy="66" rx="9.5" ry="11" fill="#c8452c" transform="rotate(-20 65 66)"/>
+    <g class="p leg-hind" style="transform-origin:50% 20%">
+      <ellipse class="o" cx="46" cy="72" rx="12" ry="9" fill="#7a5b48"/>
+      <ellipse class="o" cx="52" cy="83" rx="10" ry="4" fill="#7a5b48"/>
+    </g>
+    <g class="p leg-front" style="transform-origin:50% 0%"><rect class="o" x="68" y="70" width="7" height="14" rx="3.5" fill="#7a5b48"/></g>
+    <path class="o" d="M70,33 L70,20 L79,30 Z" fill="#8a6a55"/>
+    <circle class="o" cx="77" cy="43" r="13" fill="#8a6a55"/>
+    <ellipse cx="83" cy="48" rx="6.5" ry="4.5" fill="#b39580"/>
+    <circle cx="81" cy="40.5" r="5" fill="#c9b2a1"/>
+    ${eye(81, 40.5, 3.4)}${blush(82, 50, 3.6, 2.3)}
+    <ellipse cx="89.5" cy="45" rx="2.2" ry="1.8" fill="#2a1f1b"/>`),
 
-                gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+  koi: (c1 = "#ff7a3d", c2 = "#fff3e8") => svg(`
+    <g class="p tail-fin" style="transform-origin:100% 50%"><path class="o" d="M31,50 C21,40 11,32 4,31 C10,44 10,56 4,69 C11,68 21,60 31,50 Z" fill="${c2}"/></g>
+    <g class="p fishbody" style="transform-origin:20% 50%">
+      <path class="o" d="M50,35 C55,22 70,22 76,35 Z" fill="${c2}"/>
+      <path class="o" d="M26,50 C40,30 74,28 96,42 C104,47 104,53 96,58 C74,72 40,70 26,50 Z" fill="${c1}"/>
+      <path d="M46,36 C54,32 66,32 72,36 C68,45 54,46 46,36 Z" fill="${c2}"/>
+      <path d="M70,58 C77,53 87,53 92,57 C86,63 77,63 70,58 Z" fill="${c2}"/>
+      <path d="M48,52 q4,4 8,0 M58,54 q4,4 8,0 M53,46 q4,4 8,0" stroke="#fff" stroke-width="1.6" fill="none" opacity=".55" stroke-linecap="round"/>
+      <g class="p fin" style="transform-origin:100% 0%"><path class="o" d="M74,60 C72,70 64,77 60,75 C62,68 66,62 74,60 Z" fill="${c2}"/></g>
+      ${eye(90, 46, 3.6)}${blush(90, 53, 3.4, 2.2)}
+      <path d="M101,50 q2.4,1.4 0,3" stroke="#43302b" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+      <path d="M100,54 q-2,6 -7,7" stroke="#43302b" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+    </g>`),
 
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
+  turtle: () => svg(`
+    <g class="p flip-b" style="transform-origin:100% 0%"><path class="o" d="M34,60 C24,63 14,70 15,75 C23,76 32,70 39,63 Z" fill="#7fb36a"/></g>
+    <g class="p flip-f" style="transform-origin:0% 0%"><path class="o" d="M68,60 C76,66 82,74 79,78 C72,78 65,70 62,63 Z" fill="#6fa25b"/></g>
+    <path class="o" d="M26,55 L15,57 L26,60 Z" fill="#8cc275"/>
+    <g class="p sniff" style="transform-origin:0% 60%">
+      <path class="o" d="M84,52 C90,46 100,44 106,48 C111,52 109,59 103,61 C96,63 90,61 84,59 Z" fill="#8cc275"/>
+      <path d="M90,56 Q97,57.5 105,56.5" stroke="#f3d35a" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+      ${eye(100, 50.5, 3.3)}${blush(103, 56, 2.8, 1.8)}
+    </g>
+    <path class="o" d="M22,58 C24,32 44,21 58,21 C74,21 90,33 90,58 Z" fill="#5f8f4e"/>
+    <path d="M40,29 L45,41 L37,55 M58,23 L58,40 M76,29 L71,41 L79,55 M45,41 L71,41 M37,55 L79,55" stroke="#3f6b34" stroke-width="2.4" fill="none" stroke-linejoin="round"/>
+    <path d="M44,28 Q56,22 66,26" stroke="#9cc98a" stroke-width="3" fill="none" stroke-linecap="round" opacity=".8"/>
+    <path class="o" d="M19,58 Q55,66 93,58 Q55,72 19,58 Z" fill="#e7cf86"/>
+    <g class="p flip-b" style="transform-origin:100% 0%"><path class="o" d="M30,62 C20,66 11,74 13,79 C21,80 31,73 37,65 Z" fill="#8cc275"/></g>
+    <g class="p flip-f" style="transform-origin:0% 0%"><path class="o" d="M74,62 C84,67 92,75 89,80 C81,81 73,72 69,65 Z" fill="#8cc275"/></g>`),
+};
 
-                osc.start();
-                osc.stop(audioCtx.currentTime + 0.15);
-            } catch(e) {}
-        }
-    </script>
+/* ================= 動物資料 ================= */
+const CAT = {
+  fly: { word: "飛", name: "飛行", zone: "sky", zoneName: "天空" },
+  walk: { word: "走", name: "走動", zone: "land", zoneName: "陸地" },
+  swim: { word: "游", name: "游動", zone: "pond", zoneName: "池塘" },
+};
+
+const SPECIES = [
+  { id: "spoonbill", name: "黑臉琵鷺", cat: "fly", motion: "glide", k: 1.15,
+    how: "我拍動又大又闊的翅膀飛行，有時張開翅膀在天空滑翔。",
+    fact: "我的嘴巴長長的，像一隻湯匙。每年冬天，我會飛到香港米埔的濕地過冬。",
+    hint: "黑臉琵鷺有一對大翅膀。", video: "黑臉琵鷺 飛行 米埔" },
+  { id: "pigeon", name: "白鴿", cat: "fly", motion: "flap", k: .95,
+    how: "我快快地拍動翅膀，在天空飛來飛去。",
+    fact: "我也會用兩隻腳在地上走路，常常在公園找食物。",
+    hint: "白鴿有一對翅膀。", also: { walk: "白鴿也會用兩隻腳走路，不過牠最厲害的是會飛！" }, video: "白鴿 飛行" },
+  { id: "sparrow", name: "麻雀", cat: "fly", motion: "bound", k: .8,
+    how: "我拍幾下翅膀，又收起翅膀，一高一低地飛。",
+    fact: "我的臉頰上有一點黑色，喜歡在樹上吱吱喳喳地叫。",
+    hint: "麻雀有一對小翅膀。", also: { walk: "麻雀也會在地上一跳一跳，不過牠最常用翅膀飛！" }, video: "麻雀 飛行" },
+  { id: "butterfly", name: "蝴蝶", cat: "fly", motion: "flutter", k: .72,
+    how: "我輕輕地拍動四片翅膀，在花叢中飛舞。",
+    fact: "我是昆蟲，有六隻腳。不只雀鳥會飛，很多昆蟲也會飛啊！",
+    hint: "蝴蝶有四片漂亮的翅膀。", video: "蝴蝶 飛行" },
+  { id: "boar", name: "野豬", cat: "walk", motion: "trot", k: 1.15, ground: true,
+    how: "我用四隻腳在山上走動，走得又快又穩。",
+    fact: "我用長鼻子在泥土裏找食物。在郊野見到我，要保持距離，也不要餵我啊！",
+    hint: "野豬沒有翅膀，牠有四隻腳。", video: "香港 野豬 走路" },
+  { id: "dog", name: "小狗", cat: "walk", motion: "dog", k: 1, ground: true, wag: true,
+    how: "我用四隻腳走路，也會跑得很快。",
+    fact: "我開心的時候，會搖搖尾巴。",
+    hint: "小狗沒有翅膀，牠有四隻腳。", also: { swim: "對！小狗也會游泳，不過牠平時用四隻腳走路和跑步。" }, video: "小狗 走路 跑步" },
+  { id: "cat", name: "小貓", cat: "walk", motion: "cat", k: .95, ground: true,
+    how: "我用四隻腳走路，腳步輕輕的，沒有聲音。",
+    fact: "我的腳底有軟軟的肉墊，還會用長尾巴保持平衡。",
+    hint: "小貓沒有翅膀，牠有四隻腳。", video: "小貓 走路" },
+  { id: "rabbit", name: "兔子", cat: "walk", motion: "hop", k: .9, ground: true, word: "跳",
+    how: "我用有力的後腿，一跳一跳地前進。",
+    fact: "我的耳朵長長的，可以聽到很遠的聲音。",
+    hint: "兔子沒有翅膀，牠有強壯的後腿。", video: "兔子 跳" },
+  { id: "squirrel", name: "赤腹松鼠", cat: "walk", motion: "scamper", k: .85, ground: true, word: "跳",
+    how: "我用四隻腳跑跑跳跳，還會爬到樹上。",
+    fact: "我的肚子是紅色的，所以叫「赤腹」松鼠。我的大尾巴毛茸茸的。",
+    hint: "松鼠沒有翅膀，牠有四隻腳。", video: "赤腹松鼠 香港" },
+  { id: "koi", name: "鯉魚", cat: "swim", motion: "fish", k: 1,
+    how: "我左右擺動身體和尾巴，在水中游來游去。",
+    fact: "我用魚鰭控制方向，用鰓在水中呼吸。",
+    hint: "鯉魚沒有腳，也沒有翅膀，牠有魚鰭和尾巴。", video: "鯉魚 游泳" },
+  { id: "turtle", name: "烏龜", cat: "swim", motion: "paddle", k: 1.05,
+    how: "我用四隻腳划水，慢慢地游。",
+    fact: "我也會爬上石頭曬太陽。我有硬硬的殼保護身體。",
+    hint: "烏龜沒有翅膀。", also: { walk: "對！烏龜在陸地上會慢慢地爬，在水中就用四隻腳划水游泳。" }, video: "烏龜 游泳" },
+];
+const byId = Object.fromEntries(SPECIES.map(s => [s.id, s]));
+
+/* 場景中的動物（鯉魚有兩條，顏色不同） */
+const ACTORS = [
+  { sp: "spoonbill" }, { sp: "pigeon" }, { sp: "sparrow" }, { sp: "butterfly" },
+  { sp: "boar" }, { sp: "dog" }, { sp: "cat" }, { sp: "rabbit" }, { sp: "squirrel" },
+  { sp: "koi" }, { sp: "koi", colors: ["#fffaf3", "#f0483e"] }, { sp: "turtle" },
+];
+
+/* 速度以「每秒走過場景闊度的比例」表示，大屏幕小屏幕看起來一樣 */
+const MOTION = {
+  glide:   { kind: "fly", speed: [.05, .07], turn: .7, flap: .6 },
+  flap:    { kind: "fly", speed: [.08, .11], turn: 1.5, flap: .26 },
+  bound:   { kind: "fly", speed: [.11, .15], turn: 2.4, flap: .11 },
+  flutter: { kind: "fly", speed: [.035, .055], turn: 3.2, flap: .15 },
+  trot:    { kind: "walk", speed: [.06, .085], pause: [.8, 2.6], pauseChance: .6, bob: .03 },
+  dog:     { kind: "walk", speed: [.065, .09], run: [.17, .22], runChance: .35, pause: [.5, 2], pauseChance: .5, bob: .035 },
+  cat:     { kind: "walk", speed: [.03, .045], pause: [1.5, 4], pauseChance: .8, bob: .015 },
+  hop:     { kind: "hop", dist: .07, time: .42, height: .55, hops: [2, 5], pause: [.8, 2.6] },
+  scamper: { kind: "hop", dist: .04, time: .26, height: .28, hops: [3, 7], pause: [.4, 1.8] },
+  fish:    { kind: "swim", speed: [.04, .07], turn: 1, wag: .7, pauseChance: .3 },
+  paddle:  { kind: "swim", speed: [.017, .027], turn: .5, wag: 1.4, pauseChance: .45 },
+};
+
+/* ================= 工具 ================= */
+const $ = s => document.querySelector(s);
+const rand = (a, b) => a + Math.random() * (b - a);
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+const shuffle = arr => {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+};
+const angDiff = (a, b) => Math.atan2(Math.sin(b - a), Math.cos(b - a));
+const reduceMQ = matchMedia("(prefers-reduced-motion: reduce)");
+const artFor = (sp, colors) => sp.id === "koi" && colors ? ART.koi(...colors) : ART[sp.id]();
+
+/* ================= 聲音 ================= */
+let audioCtx = null;
+let soundOn = localStorage.getItem("p1animal-sound") !== "off";
+function tone(notes, type = "sine") {
+  if (!soundOn) return;
+  try {
+    audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === "suspended") audioCtx.resume();
+    let t = audioCtx.currentTime;
+    for (const [freq, dur] of notes) {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, t);
+      gain.gain.setValueAtTime(.0001, t);
+      gain.gain.exponentialRampToValueAtTime(.25, t + .02);
+      gain.gain.exponentialRampToValueAtTime(.0001, t + dur);
+      osc.connect(gain).connect(audioCtx.destination);
+      osc.start(t);
+      osc.stop(t + dur + .02);
+      t += dur * .8;
+    }
+  } catch (e) { /* 部分瀏覽器不支援 Web Audio，靜音即可 */ }
+}
+const sfx = {
+  tap: () => tone([[660, .12], [990, .14]]),
+  good: () => tone([[523, .14], [659, .14], [784, .22]], "triangle"),
+  try: () => tone([[392, .16], [330, .22]], "triangle"),
+};
+const canSpeak = "speechSynthesis" in window;
+function speak(text) {
+  if (!canSpeak) return;
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  const voices = speechSynthesis.getVoices();
+  const v = voices.find(v => /zh[-_]HK|yue/i.test(v.lang)) || voices.find(v => /zh[-_](TW|Hant)/i.test(v.lang));
+  u.lang = v ? v.lang : "zh-HK";
+  if (v) u.voice = v;
+  u.rate = .85;
+  speechSynthesis.speak(u);
+}
+
+/* ================= 建立場景 ================= */
+const scene = $("#scene");
+const zones = {};
+document.querySelectorAll(".zone").forEach(z => { zones[z.dataset.zone] = { el: z, w: 0, h: 0 }; });
+
+[[8, 70], [38, 95], [64, 120]].forEach(([top, dur], i) => {
+  const c = document.createElement("div");
+  c.className = "cloud";
+  c.style.top = top + "%";
+  c.style.animationDuration = dur + "s";
+  c.style.animationDelay = (-dur * (i * .37 + .15)) + "s";
+  c.innerHTML = `<svg viewBox="0 0 160 64" aria-hidden="true"><path d="M24,60 C6,60 4,38 22,36 C20,18 44,10 56,24 C62,6 94,4 100,24 C112,14 134,20 132,38 C152,38 154,60 136,60 Z" fill="#fff"/></svg>`;
+  zones.sky.el.prepend(c);
+});
+
+const actors = ACTORS.map((a, i) => {
+  const sp = byId[a.sp];
+  const m = MOTION[sp.motion];
+  const el = document.createElement("button");
+  el.type = "button";
+  el.className = "animal" + (sp.wag ? " wag" : "");
+  el.style.setProperty("--k", sp.k);
+  el.style.setProperty("--blink", (-Math.random() * 5).toFixed(2) + "s");
+  el.setAttribute("aria-label", `${sp.name}，會${sp.word || CAT[sp.cat].word}。按一下看介紹`);
+  el.innerHTML = `<div class="art">${artFor(sp, a.colors)}</div><span class="tag">${sp.name}<i class="mv mv-${sp.cat}">${sp.word || CAT[sp.cat].word}</i></span>`;
+  const zone = zones[CAT[sp.cat].zone];
+  zone.el.appendChild(el);
+  return {
+    sp, m, el, zone, art: el.querySelector(".art"),
+    x: 0, y: 0, bw: 0, bh: 0, heading: Math.random() < .5 ? 0 : Math.PI,
+    speed: rand(...(m.speed || [.05, .05])), face: 1, faceShown: 1,
+    state: "move", timer: rand(.5, 2), t: Math.random() * 10, phase: 0,
+    tx: 0, ty: 0, held: false, cls: "", vars: {},
+  };
+});
+
+function setClass(a, cls) {
+  if (a.cls === cls) return;
+  const keep = a.el.className.split(" ").filter(c => !c.startsWith("is-")).join(" ");
+  a.el.className = keep + (cls ? " " + cls : "");
+  a.cls = cls;
+}
+function setVar(a, name, val) {
+  const s = val.toFixed(2) + "s";
+  if (a.vars[name] === s) return;
+  a.vars[name] = s;
+  a.el.style.setProperty(name, s);
+}
+
+/* 每種動物可以活動的範圍（像素） */
+function bounds(a) {
+  const { w, h } = a.zone;
+  const maxX = Math.max(0, w - a.bw);
+  const maxY = Math.max(0, h - a.bh - 4);
+  if (a.m.kind === "walk" || a.m.kind === "hop") return { minX: 0, maxX, minY: Math.min(maxY, h * .3), maxY };
+  if (a.m.kind === "swim") return { minX: 0, maxX, minY: Math.min(maxY, h * .16), maxY };
+  return { minX: 0, maxX, minY: Math.min(maxY, 8), maxY };
+}
+
+function measure() {
+  for (const z of Object.values(zones)) { z.w = z.el.clientWidth; z.h = z.el.clientHeight; }
+  for (const a of actors) {
+    a.bw = a.el.offsetWidth;
+    a.bh = a.el.offsetHeight;
+    const b = bounds(a);
+    a.x = clamp(a.x, b.minX, b.maxX);
+    a.y = clamp(a.y, b.minY, b.maxY);
+  }
+}
+
+/* 開始時把動物分散排好，避免疊在一起 */
+function spread() {
+  const groups = {};
+  actors.forEach(a => (groups[a.sp.cat] = groups[a.sp.cat] || []).push(a));
+  for (const list of Object.values(groups)) {
+    list.forEach((a, i) => {
+      const b = bounds(a);
+      const n = list.length;
+      a.x = b.minX + (b.maxX - b.minX) * ((i + .5) / n) + rand(-.03, .03) * a.zone.w;
+      const rows = n > 3 ? 2 : 1;
+      a.y = b.minY + (b.maxY - b.minY) * (rows === 1 ? rand(.2, .8) : (i % 2 ? rand(.65, 1) : rand(0, .35)));
+      a.x = clamp(a.x, b.minX, b.maxX);
+      a.y = clamp(a.y, b.minY, b.maxY);
+      a.face = a.faceShown = Math.random() < .5 ? 1 : -1;
+      a.heading = a.face > 0 ? rand(-.3, .3) : Math.PI + rand(-.3, .3);
+      if (a.m.kind === "hop") { a.state = "pause"; a.timer = rand(.2, 1.5); }
+      newTarget(a);
+    });
+  }
+}
+
+function newTarget(a) {
+  const b = bounds(a);
+  if (a.m.kind === "walk") {
+    const dir = a.x < b.minX + 40 ? 1 : a.x > b.maxX - 40 ? -1 : (Math.random() < .6 ? a.face : -a.face);
+    a.tx = clamp(a.x + dir * rand(.18, .5) * a.zone.w, b.minX, b.maxX);
+    a.ty = clamp(a.y + rand(-.18, .18) * a.zone.h, b.minY, b.maxY);
+    const running = a.m.run && Math.random() < a.m.runChance;
+    a.speed = rand(...(running ? a.m.run : a.m.speed));
+  } else if (a.m.kind === "fly" || a.m.kind === "swim") {
+    const far = Math.random() < .7;
+    a.tx = far ? (a.x < (b.minX + b.maxX) / 2 ? rand(.6, 1) : rand(0, .4)) * (b.maxX - b.minX) + b.minX : rand(b.minX, b.maxX);
+    a.ty = rand(b.minY, b.maxY);
+    if (a.sp.id === "turtle" && Math.random() < .35) a.ty = b.minY + rand(0, .2) * (b.maxY - b.minY);
+    a.speed = rand(...a.m.speed);
+  }
+}
+
+/* ================= 動作 ================= */
+function steer(a, dt, b) {
+  const want = Math.atan2(a.ty - a.y, a.tx - a.x);
+  const d = angDiff(a.heading, want);
+  a.heading += clamp(d, -a.m.turn * dt, a.m.turn * dt);
+  if (a.m.kind === "fly") a.heading += Math.sin(a.t * 1.7 + a.phase) * .25 * dt;
+  if (a.sp.motion === "flutter") a.heading += rand(-4, 4) * dt;
+  let sp = a.speed * a.zone.w;
+  if (a.sp.motion === "paddle") sp *= .45 + .55 * Math.max(0, Math.sin(a.t * Math.PI * 2 / a.m.wag));
+  if (a.state === "glide") sp *= .9;
+  if (a.state === "pause") sp *= .08;
+  a.x += Math.cos(a.heading) * sp * dt;
+  a.y += Math.sin(a.heading) * sp * dt + (a.state === "glide" ? a.zone.h * .03 * dt : 0);
+  if (a.x < b.minX || a.x > b.maxX || a.y < b.minY || a.y > b.maxY) {
+    a.x = clamp(a.x, b.minX, b.maxX);
+    a.y = clamp(a.y, b.minY, b.maxY);
+    newTarget(a);
+  }
+  if (Math.hypot(a.tx - a.x, a.ty - a.y) < Math.max(30, a.bw * .5)) newTarget(a);
+  const c = Math.cos(a.heading);
+  if (c > .2) a.face = 1; else if (c < -.2) a.face = -1;
+  const maxTilt = a.m.kind === "swim" ? .25 : .45;
+  return clamp(Math.atan2(Math.sin(a.heading), Math.abs(c)), -maxTilt, maxTilt);
+}
+
+function updateFly(a, dt, b) {
+  let bob = Math.sin(a.t * 3 + a.phase) * a.bh * .04;
+  let cls = "is-flying";
+  if (a.sp.motion === "glide") {
+    a.timer -= dt;
+    if (a.timer <= 0) {
+      a.state = a.state === "glide" ? "move" : "glide";
+      a.timer = a.state === "glide" ? rand(1.5, 3.2) : rand(2, 4.5);
+    }
+    if (a.state === "glide") cls = "is-gliding";
+  } else if (a.sp.motion === "bound") {
+    const p = (a.t / .8) % 1;
+    bob = -Math.sin(p * Math.PI * 2) * a.bh * .09;
+    if (p > .5 && p < .85) cls = "is-folded";
+  } else if (a.sp.motion === "flutter") {
+    bob = Math.sin(a.t * 5 + a.phase) * a.bh * .08;
+  } else if (Math.random() < dt * .08 && a.state !== "glide") {
+    a.state = "glide"; a.timer = rand(.6, 1.2);
+  }
+  if (a.sp.motion === "flap" && a.state === "glide") {
+    a.timer -= dt;
+    cls = "is-gliding";
+    if (a.timer <= 0) a.state = "move";
+  }
+  setVar(a, "--flap", a.m.flap * (a.speed / a.m.speed[1]) ** -.3);
+  setClass(a, cls);
+  return { tilt: steer(a, dt, b), bob };
+}
+
+function updateSwim(a, dt, b) {
+  if (a.state === "pause") {
+    a.timer -= dt;
+    if (a.timer <= 0) { a.state = "move"; newTarget(a); }
+  } else if (Math.random() < dt * a.m.pauseChance * .25) {
+    a.state = "pause"; a.timer = rand(.8, 2.4);
+  }
+  setVar(a, "--wag", a.m.wag * (a.state === "pause" ? 2.2 : 1));
+  setClass(a, "is-swimming");
+  const bob = Math.sin(a.t * 1.6 + a.phase) * a.bh * .03;
+  return { tilt: steer(a, dt, b), bob };
+}
+
+function updateWalk(a, dt, b) {
+  if (a.state === "pause") {
+    a.timer -= dt;
+    setClass(a, "is-idle");
+    if (a.timer <= 0) { a.state = "move"; newTarget(a); }
+    return { tilt: 0, bob: 0 };
+  }
+  const dx = a.tx - a.x, dy = a.ty - a.y;
+  const dist = Math.hypot(dx, dy);
+  const sp = a.speed * a.zone.w;
+  if (dist < 4) {
+    if (Math.random() < a.m.pauseChance) { a.state = "pause"; a.timer = rand(...a.m.pause); }
+    else newTarget(a);
+    return { tilt: 0, bob: 0 };
+  }
+  const step = Math.min(dist, sp * dt);
+  a.x += dx / dist * step;
+  a.y += dy / dist * step;
+  if (Math.abs(dx) > 2) a.face = dx > 0 ? 1 : -1;
+  const stride = a.bw * .5;
+  const gait = clamp(stride / sp, .18, 1.2);
+  setVar(a, "--gait", gait);
+  a.phase += dt / gait;
+  setClass(a, "is-walking");
+  return { tilt: Math.sin(a.phase * Math.PI * 2) * .03, bob: -Math.abs(Math.sin(a.phase * Math.PI * 2)) * a.bh * a.m.bob };
+}
+
+function updateHop(a, dt, b) {
+  if (a.state === "pause") {
+    a.timer -= dt;
+    setClass(a, "is-idle");
+    if (a.timer <= 0) {
+      a.state = "rest";
+      a.hopsLeft = Math.round(rand(...a.m.hops));
+      if (a.x < b.minX + a.bw) a.face = 1;
+      else if (a.x > b.maxX - a.bw) a.face = -1;
+      else if (Math.random() < .4) a.face = -a.face;
+      a.dy = rand(-.12, .12) * a.zone.h;
+      a.timer = .25;
+    }
+    return { tilt: 0, bob: 0 };
+  }
+  if (a.state === "rest") {
+    a.timer -= dt;
+    setClass(a, "");
+    if (a.timer <= 0) {
+      if (a.hopsLeft-- <= 0) { a.state = "pause"; a.timer = rand(...a.m.pause); return { tilt: 0, bob: 0 }; }
+      a.state = "hop";
+      a.hopT = 0;
+      a.hopDur = a.m.time * rand(.9, 1.15);
+      a.x0 = a.x; a.y0 = a.y;
+      a.x1 = clamp(a.x + a.face * a.m.dist * a.zone.w * rand(.75, 1.2), b.minX, b.maxX);
+      a.y1 = clamp(a.y + a.dy / Math.max(1, a.hopsLeft + 1), b.minY, b.maxY);
+    }
+    return { tilt: 0, bob: 0 };
+  }
+  a.hopT += dt / a.hopDur;
+  const p = Math.min(1, a.hopT);
+  a.x = a.x0 + (a.x1 - a.x0) * p;
+  a.y = a.y0 + (a.y1 - a.y0) * p;
+  setClass(a, "is-airborne");
+  if (p >= 1) { a.state = "rest"; a.timer = rand(.06, .16); }
+  return { tilt: (p - .5) * .5, bob: -Math.sin(p * Math.PI) * a.bh * a.m.height };
+}
+
+const UPDATE = { fly: updateFly, swim: updateSwim, walk: updateWalk, hop: updateHop };
+
+function render(a, pose) {
+  const { tilt, bob } = pose;
+  const b = bounds(a);
+  let depth = 1;
+  if (a.sp.ground) {
+    depth = .82 + .28 * ((a.y - b.minY) / Math.max(1, b.maxY - b.minY));
+    a.el.style.zIndex = 2 + Math.round(a.y);
+  }
+  const y = clamp(a.y + bob, 0, b.maxY);
+  a.el.style.transform = `translate3d(${a.x.toFixed(1)}px, ${y.toFixed(1)}px, 0)`;
+  a.art.style.transform = `scaleX(${a.faceShown.toFixed(3)}) rotate(${tilt.toFixed(3)}rad) scale(${depth.toFixed(3)})`;
+}
+
+let paused = false, last = 0, rafId = 0;
+const still = () => paused || document.hidden;
+
+/* 同一區的動物太接近時，輕輕推開，避免名字疊在一起 */
+function separate(dt) {
+  for (let i = 0; i < actors.length; i++) {
+    for (let j = i + 1; j < actors.length; j++) {
+      const a = actors[i], c = actors[j];
+      if (a.zone !== c.zone) continue;
+      const dx = (c.x + c.bw / 2) - (a.x + a.bw / 2);
+      const dy = (c.y + c.bh / 2) - (a.y + a.bh / 2);
+      const ox = (a.bw + c.bw) / 2 - Math.abs(dx);
+      const oy = (a.bh + c.bh) / 2 - Math.abs(dy);
+      if (ox <= 0 || oy <= 0) continue;
+      const push = Math.min(oy, 60 * dt);
+      const s = dy >= 0 ? 1 : -1;
+      for (const [m, dir] of [[a, -s], [c, s]]) {
+        if (m.held || m.state === "hop") continue;
+        const b = bounds(m);
+        m.y = clamp(m.y + dir * push / 2, b.minY, b.maxY);
+        if (m.ty !== undefined) m.ty = clamp(m.ty + dir * push / 2, b.minY, b.maxY);
+      }
+    }
+  }
+}
+
+function frame(now) {
+  const dt = Math.min(.05, (now - last) / 1000 || 0);
+  last = now;
+  separate(dt);
+  for (const a of actors) {
+    if (a.held) continue;
+    a.t += dt;
+    const pose = UPDATE[a.m.kind](a, dt, bounds(a));
+    a.faceShown += clamp(a.face - a.faceShown, -dt * 7, dt * 7);
+    if (Math.abs(a.faceShown) < .08) a.faceShown = a.face * .08;
+    a.pose = pose;
+    render(a, pose);
+  }
+  rafId = still() ? 0 : requestAnimationFrame(frame);
+}
+function start() {
+  if (rafId || still()) return;
+  last = performance.now();
+  rafId = requestAnimationFrame(frame);
+}
+function stopAll() {
+  cancelAnimationFrame(rafId);
+  rafId = 0;
+}
+function drawStill() {
+  for (const a of actors) {
+    a.faceShown = a.face;
+    render(a, a.pose || { tilt: 0, bob: 0 });
+  }
+}
+
+/* 小朋友按住或滑鼠停在動物上時，動物會停下來，方便點選 */
+for (const a of actors) {
+  const hold = () => { a.held = true; a.el.classList.add("frozen"); };
+  const release = () => { a.held = false; a.el.classList.remove("frozen"); };
+  a.el.addEventListener("pointerenter", e => { if (e.pointerType === "mouse") hold(); });
+  a.el.addEventListener("pointerleave", release);
+  a.el.addEventListener("pointerdown", hold);
+  a.el.addEventListener("pointercancel", release);
+  a.el.addEventListener("focus", hold);
+  a.el.addEventListener("blur", release);
+  a.el.addEventListener("click", () => { sfx.tap(); openCard(a.sp, a.el); release(); });
+}
+
+/* ================= 控制按鈕 ================= */
+const btnPause = $("#btn-pause");
+function setPaused(v) {
+  paused = v;
+  scene.classList.toggle("paused", v);
+  btnPause.setAttribute("aria-pressed", String(v));
+  btnPause.textContent = v ? "▶ 再動起來" : "⏸ 停一停";
+  v ? stopAll() : start();
+}
+btnPause.addEventListener("click", () => setPaused(!paused));
+
+const btnSound = $("#btn-sound");
+function showSound() {
+  btnSound.textContent = soundOn ? "🔊" : "🔇";
+  btnSound.setAttribute("aria-pressed", String(soundOn));
+  btnSound.setAttribute("aria-label", soundOn ? "聲音：開" : "聲音：關");
+}
+btnSound.addEventListener("click", () => {
+  soundOn = !soundOn;
+  localStorage.setItem("p1animal-sound", soundOn ? "on" : "off");
+  if (!soundOn && canSpeak) speechSynthesis.cancel();
+  showSound();
+  sfx.tap();
+});
+showSound();
+
+/* ================= 對話框 ================= */
+let resumeAfterDialog = false;
+function openDialog(d) {
+  resumeAfterDialog = !paused;
+  stopAll();
+  if (d.showModal) d.showModal(); else d.setAttribute("open", "");
+}
+function closeDialog(d) {
+  if (canSpeak) speechSynthesis.cancel();
+  if (d.close) d.close(); else d.removeAttribute("open");
+}
+document.querySelectorAll("dialog").forEach(d => {
+  d.addEventListener("click", e => {
+    if (e.target === d || e.target.closest("[data-close]")) closeDialog(d);
+  });
+  d.addEventListener("close", () => { if (canSpeak) speechSynthesis.cancel(); if (resumeAfterDialog) start(); });
+});
+
+const card = $("#card");
+let cardSp = null;
+function openCard(sp) {
+  cardSp = sp;
+  const cat = CAT[sp.cat];
+  const kind = MOTION[sp.motion].kind;
+  $("#card-stage").dataset.zone = cat.zone;
+  const art = $("#card-art");
+  art.className = "card-art m-" + kind + (sp.wag ? " wag" : "");
+  art.innerHTML = artFor(sp);
+  art.classList.add(kind === "fly" ? "is-flying" : kind === "swim" ? "is-swimming" : kind === "walk" ? "is-walking" : "is-airborne");
+  art.style.setProperty("--flap", (MOTION[sp.motion].flap || .3) + "s");
+  art.style.setProperty("--wag", (MOTION[sp.motion].wag || .7) + "s");
+  art.style.setProperty("--gait", ".6s");
+  $("#card-name").textContent = sp.name;
+  $("#card-chip").innerHTML = `牠住在${cat.zoneName}，會<span class="mv mv-${sp.cat}">${cat.name}</span>`;
+  $("#card-how").textContent = sp.how;
+  $("#card-fact").textContent = sp.fact;
+  $("#card-video").href = "https://www.youtube.com/results?search_query=" + encodeURIComponent(sp.video);
+  $("#card-speak").hidden = !canSpeak;
+  openDialog(card);
+}
+$("#card-speak").addEventListener("click", () => {
+  if (cardSp) speak(`${cardSp.name}。${cardSp.how}${cardSp.fact}`);
+});
+
+/* ================= 考考你 ================= */
+const quiz = $("#quiz");
+const quizBox = $("#quiz-box");
+const ROUND = 6;
+let q = null;
+
+function startQuiz() {
+  const pool = shuffle(SPECIES.slice()).slice(0, ROUND);
+  q = { pool, i: 0, stars: 0, tries: 0 };
+  showQuestion();
+  if (!quiz.open) openDialog(quiz);
+}
+function showQuestion() {
+  const sp = q.pool[q.i];
+  q.tries = 0;
+  quizBox.innerHTML = `
+    <button class="close" type="button" data-close aria-label="關閉">✕</button>
+    <p class="quiz-progress">第 ${q.i + 1} / ${ROUND} 題　⭐ ${q.stars}</p>
+    <div class="card-stage" data-zone="neutral" style="background:#fff3c4"><div class="card-art">${artFor(sp)}</div></div>
+    <h2 id="quiz-q">${sp.name}怎樣活動？</h2>
+    <div class="choices">
+      ${Object.entries(CAT).map(([k, c]) => `<button class="btn choice" type="button" data-cat="${k}">${c.word}</button>`).join("")}
+    </div>
+    <p class="feedback" aria-live="polite"></p>`;
+  quizBox.querySelectorAll(".choice").forEach(b => b.addEventListener("click", () => answer(sp, b)));
+  if (canSpeak && soundOn) speak(`${sp.name}怎樣活動？`);
+}
+function answer(sp, btn) {
+  const fb = quizBox.querySelector(".feedback");
+  const choice = btn.dataset.cat;
+  const ok = choice === sp.cat || (sp.also && sp.also[choice]);
+  if (!ok) {
+    q.tries++;
+    btn.disabled = true;
+    fb.className = "feedback try";
+    fb.textContent = "再想一想！" + sp.hint;
+    sfx.try();
+    return;
+  }
+  if (q.tries === 0) q.stars++;
+  quizBox.querySelectorAll(".choice").forEach(b => { b.disabled = true; });
+  btn.classList.add("right");
+  fb.className = "feedback good";
+  fb.textContent = choice === sp.cat
+    ? `答對了！${sp.name}會${CAT[sp.cat].name}。${q.tries === 0 ? "⭐" : ""}`
+    : `答對了！${sp.also[choice]}${q.tries === 0 ? "⭐" : ""}`;
+  quizBox.querySelector(".quiz-progress").textContent = `第 ${q.i + 1} / ${ROUND} 題　⭐ ${q.stars}`;
+  sfx.good();
+  const next = document.createElement("button");
+  next.className = "btn btn-quiz";
+  next.type = "button";
+  next.textContent = q.i + 1 < ROUND ? "下一題 ➜" : "看看成績 ➜";
+  next.addEventListener("click", () => { q.i++; q.i < ROUND ? showQuestion() : showResult(); });
+  quizBox.appendChild(next);
+  next.focus();
+}
+function showResult() {
+  const msg = q.stars === ROUND ? "全部答對，你真棒！" : q.stars >= ROUND / 2 ? "做得好！" : "繼續努力，再試一次吧！";
+  quizBox.innerHTML = `
+    <button class="close" type="button" data-close aria-label="關閉">✕</button>
+    <h2 id="quiz-q">${msg}</h2>
+    <p class="stars" aria-label="得到 ${q.stars} 粒星">${"⭐".repeat(q.stars)}${"☆".repeat(ROUND - q.stars)}</p>
+    <p class="feedback good">你第一次就答對了 ${q.stars} 題（共 ${ROUND} 題）。</p>
+    <div class="choices">
+      <button class="btn btn-quiz" type="button" id="quiz-again">🔄 再玩一次</button>
+      <button class="btn" type="button" data-close>🏠 返回場景</button>
+    </div>`;
+  $("#quiz-again").addEventListener("click", startQuiz);
+  if (q.stars >= ROUND / 2) sfx.good();
+}
+$("#btn-quiz").addEventListener("click", () => { sfx.tap(); startQuiz(); });
+
+/* ================= 啟動 ================= */
+measure();
+spread();
+drawStill();
+new ResizeObserver(() => { measure(); if (still()) drawStill(); }).observe(scene);
+document.addEventListener("visibilitychange", () => (document.hidden ? stopAll() : start()));
+const onMotionPref = () => setPaused(reduceMQ.matches);
+reduceMQ.addEventListener ? reduceMQ.addEventListener("change", onMotionPref) : reduceMQ.addListener(onMotionPref);
+setPaused(reduceMQ.matches);
+})();
+</script>
 </body>
 </html>
